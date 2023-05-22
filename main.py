@@ -5,21 +5,29 @@ from telebot import types
 bot = telebot.TeleBot('5909009806:AAG5IZowvIkUkeBAIjNd7sRr9WDtwsor6Lo')
 
 # Обробка команди /start
-@bot.message_handler(commands=['start'])
-def start_message(message):
-	bot.send_message(message.chat.id, 'Привіт, я бот охоронної служби. Я допоможу вам створити заявку для пропуску кур\'єра/таксі/гостей або повідомити про інші проблеми. Щоб ознайомитися з усіма моїми можливостями, введіть команду /help.')
+@bot.message_handler(commands=['start', 'Розпочати'])
+def handle_start(message):
+    show_main_menu(message.chat.id)
+    
+# Функція для відображення головного меню
+def show_main_menu(chat_id):
+    # Створення клавіатури з кнопками
+    keyboard = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+    button1 = types.KeyboardButton('Нова заявка')
+    button2 = types.KeyboardButton('Стан заявок')
+    button3 = types.KeyboardButton('Контакти')
+    keyboard.add(button1, button2, button3)
 
-# Обробка команди /help
-@bot.message_handler(commands=['help'])
-def help_message(message):
-    bot.send_message(message.chat.id, 'Цей бот допоможе вам створити заявку для охорони. Доступні наступні команди:\n/start - почати спілкування з ботом\n/help - допомога...')
+    # Відправка повідомлення зі списком операцій
+    bot.send_message(chat_id, '''Привіт! Я — бот охоронної служби. Я допоможу вам створити заявку 
+    для пропуску кур\'єра/таксі/гостей або повідомити про інші проблеми. Оберіть доступну операцію:''', reply_markup=keyboard)
 
 # Обробка команди /new_request
 @bot.message_handler(commands=['new_request'])
 def handle_new_request(message):
     # Створення клавіатури з кнопками
     keyboard = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-    button1 = types.KeyboardButton('Takci')
+    button1 = types.KeyboardButton('Taкci')
     button2 = types.KeyboardButton('Кур’єр')
     button3 = types.KeyboardButton('Гості')
     button4 = types.KeyboardButton('Проблеми з парковкою')
