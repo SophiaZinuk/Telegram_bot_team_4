@@ -1,8 +1,35 @@
 import telebot
 from telebot import types
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
-# Ініціалізуємо телеграм-бота
+# Ініціалізація телеграм-бота
 bot = telebot.TeleBot('5909009806:AAG5IZowvIkUkeBAIjNd7sRr9WDtwsor6Lo')
+
+# Підключення до Google Sheets
+def get_google_sheets():
+    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+    credentials = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
+    client = gspread.authorize(credentials)
+    return client
+
+# Отримання таблиці "Номери мешканців"
+def get_residents_sheet():
+    client = get_google_sheets()
+    sheet = client.open('Security Chatbot').worksheet('Номери мешканців')
+    return sheet
+
+# Отримання таблиці "Авто на пропуск"
+def get_passes_sheet():
+    client = get_google_sheets()
+    sheet = client.open('Security Chatbot').worksheet('Авто на пропуск')
+    return sheet
+
+# Отримання таблиці "Оплати"
+def get_payments_sheet():
+    client = get_google_sheets()
+    sheet = client.open('Security Chatbot').worksheet('Оплати')
+    return sheet
 
 
 # Обробка команди /start
@@ -18,9 +45,9 @@ def handle_start(message):
 def create_main_menu_keyboard():
     # Створення клавіатури з кнопками
     keyboard = types.InlineKeyboardMarkup(row_width=2)
-    button1 = types.InlineKeyboardButton('Нова заявка', callback_data='new_request')
+    button1 = types.InlineKeyboardButton('Створити заявку', callback_data='new_request')
     button2 = types.InlineKeyboardButton('Стан заявок', callback_data='request_status')
-    button3 = types.InlineKeyboardButton('Контакти', callback_data='contacts')
+    button3 = types.InlineKeyboardButton('Контакти охорони', callback_data='contacts')
     keyboard.add(button1, button2, button3)
     return keyboard
 
@@ -74,7 +101,7 @@ def handle_new_request(message):
             bot.send_message(user_id, 'Ви не зареєстровані як мешканець.')
     else:
         # Відправка повідомлення про відсутність контактної інформації
-        bot.send_message(user_id, 'Ваша контактна інформація не надана. Будь ласка, надайте її для подальшоого опрацювання.')
+        bot.send_message(user_id, 'Ваша контактна інформація не надана. Будь ласка, надайте її для подальшого опрацювання.')
 
      
 # Обробка вибору типу заявки
