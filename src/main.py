@@ -32,10 +32,12 @@ menu_manager: MenuManager = MenuManager(localization)
 user_state_manager: UserStateManager = UserStateManager()
 
 # conversations
-auth_conversation: AuthConversation = AuthConversation(bot, localization, menu_manager, user_state_manager)
+auth_conversation: AuthConversation = AuthConversation(
+    bot, localization, menu_manager, user_state_manager)
 
 # handlers
-command_handler: CommandHandler = CommandHandler(bot, auth_conversation, localization)
+command_handler: CommandHandler = CommandHandler(
+    bot, auth_conversation, localization)
 main_menu_callback_query_handler: GeneralCallbackQueryHandler = MainMenuCallbackQueryHandler(
     bot,
     localization,
@@ -60,4 +62,3 @@ bot.set_my_commands(commands_menu.create())
 bot.enable_save_next_step_handlers()
 bot.load_next_step_handlers()
 bot.infinity_polling()
-
