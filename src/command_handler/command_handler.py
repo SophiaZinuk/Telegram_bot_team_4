@@ -47,7 +47,8 @@ class CommandHandler:
 
     def _handle_about(self, msg: types.Message):
         try:
-            self.bot.send_message(msg.chat.id, self.localization.lang['about_bot'])
+            self.bot.send_message(
+                msg.chat.id, self.localization.lang['about_bot'])
         except Exception as e:
             self.bot.send_message(
                 msg.chat.id,
@@ -56,7 +57,8 @@ class CommandHandler:
     def _assemble_start_text(self) -> str:
         text: str = ''
         text += self.localization.lang['use_following_commands'] + ':\n\n'
-        text += '/' + Command.USE + ' - ' + self.localization.lang['use_description'] + '\n'
-        text += '/' + Command.ABOUT + ' - ' + self.localization.lang['about_description'] + '\n\n'
+        text += '/' + Command.USE + ' - ' + \
+            self.localization.lang['use_description'] + '\n'
+        text += '/' + Command.ABOUT + ' - ' + \
+            self.localization.lang['about_description'] + '\n\n'
         return text
-

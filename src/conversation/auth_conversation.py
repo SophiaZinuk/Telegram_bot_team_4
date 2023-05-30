@@ -33,7 +33,8 @@ class AuthConversation:
                 message.chat.id,
                 self.localization.lang['send_number_or_share_contacts'],
                 reply_markup=self.menu_manager.get_menu(MenuType.START))
-            self.bot.register_next_step_handler(msg, self._process_phone_number)
+            self.bot.register_next_step_handler(
+                msg, self._process_phone_number)
 
     def _process_phone_number(self, message: types.Message):
         try:
