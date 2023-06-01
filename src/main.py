@@ -62,6 +62,3 @@ bot.set_my_commands(commands_menu.create())
 bot.enable_save_next_step_handlers()
 bot.load_next_step_handlers()
 bot.infinity_polling()
-
-print('hello')
-
