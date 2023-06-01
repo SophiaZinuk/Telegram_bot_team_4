@@ -11,6 +11,8 @@ class CommandsMenu:
 
     def create(self) -> List[BotCommand]:
         return [
-            BotCommand(command='/' + Command.USE, description=self.localization.lang['use_description']),
-            BotCommand(command='/' + Command.ABOUT, description=self.localization.lang['about_description'])
+            BotCommand(command='/' + Command.USE,
+                       description=self.localization.lang['use_description']),
+            BotCommand(command='/' + Command.ABOUT,
+                       description=self.localization.lang['about_description'])
         ]
