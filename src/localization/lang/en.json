@@ -1,0 +1,21 @@
+{
+  "choose_option": "Choose an option",
+  "create_application": "Create application",
+  "applications_status": "Applications status",
+  "security_contacts": "Security contacts",
+  "logout": "Logout",
+  "share_contacts": "Share contacts",
+  "send_number_or_share_contacts": "Send your phone number or share contacts",
+  "something_went_wrong": "Ooops, something went wrong",
+  "could_not_get_phone_number": "Could not get your phone number",
+  "logged_out_successfully": "Logout successful",
+  "you_have_already_logged_out": "You have been already logged out",
+  "login_successful": "Login successful",
+  "use_description": "start conversation with the bot",
+  "about_description": "find out more about the bot",
+  "use_following_commands": "Please, use following commands",
+  "about_bot": "This bot will significantly simplify the application process in our Residence"
+
+
+
+}

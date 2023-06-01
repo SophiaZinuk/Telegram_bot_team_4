@@ -1,0 +1,2 @@
+jsonpickle==3.0.1
+pyTelegramBotAPI==4.12.0
