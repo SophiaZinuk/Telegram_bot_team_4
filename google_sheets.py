@@ -18,7 +18,7 @@ sh = client.open_by_key(ID_TABLE)  # connect sheetID
 db_tenants = sh.sheet1  # def 1st sheet - tenant_database
 ids_telegram=sh.worksheet('Лист2') # def 2nd sheet
 
-result=db_tenants.get_all_records() # get all rows from page
+
 LEN_OF_NUMBER=(9,13)
 
 # check correct telephone number
@@ -33,10 +33,10 @@ def is_correct_number(message:str)->int:
         return -1
     
 
-# check number of telephon in tenat_database
+# check number of telephon in tenant_database
 def is_in_db_tenants( tel_number:int )->bool:
     
-    for row in result:       
+    for row in db_tenants.get_all_records():       
        if row['telephon']%10**10==tel_number:
            return True
     return False
@@ -56,7 +56,7 @@ def add_user_id(user_id, telephone)->bool:
 
 
 #Tests 
-
+'''
 values=('253648', '56485235458')
 print(add_user_id(*values))
 print(ids_telegram.get_all_records())
@@ -66,5 +66,5 @@ tel='380664442233'
 print(is_correct_number(tel))
 #print( is_in_db_tenants(tel))
 
-
+'''
 
