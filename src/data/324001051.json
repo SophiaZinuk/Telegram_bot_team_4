@@ -1,1 +1,0 @@
-{"py/object": "state.user_state.UserState", "chat_id": 324001051, "user_id": 324001051, "authorized": false, "menu": {"py/reduce": [{"py/type": "menu.menu_type.MenuType"}, {"py/tuple": ["MAIN"]}]}}
