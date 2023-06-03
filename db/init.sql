@@ -1,8 +1,10 @@
-CREATE TABLE IF NOT EXISTS users ( id serial PRIMARY KEY,
-                                                     address VARCHAR (50) NOT NULL,
-                                                                          user_type VARCHAR (50) NOT NULL,
-                                                                                                 phone_number VARCHAR (50) NOT NULL,
-                                                                                                                           chat_id INT);
+-- Before execution create DB with name "residental_bot". Make sure user is "postgres" and password is "postgres"
+
+CREATE TABLE IF NOT EXISTS users (id serial PRIMARY KEY,
+                                                    address VARCHAR (50) NOT NULL,
+                                                                         user_type VARCHAR (50) NOT NULL,
+                                                                                                phone_number VARCHAR (50) NOT NULL,
+                                                                                                                          chat_id INT);
 
 
 INSERT INTO users (address, user_type, phone_number)
