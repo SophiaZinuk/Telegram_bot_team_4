@@ -9,8 +9,6 @@ class StartMenu:
         self.localization = localization
 
     def create(self):
-        markup = ReplyKeyboardMarkup(
-            resize_keyboard=True, one_time_keyboard=True)
-        markup.add(KeyboardButton(
-            text=self.localization.lang['share_contacts'], request_contact=True))
+        markup = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+        markup.add(KeyboardButton(text=self.localization.lang['share_contacts'], request_contact=True))
         return markup

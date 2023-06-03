@@ -6,4 +6,4 @@ class UserState:
         self.chat_id = chat_id
         self.user_id = user_id
         self.authorized = False
-        self.menu = None
+        self.menu = dict()
