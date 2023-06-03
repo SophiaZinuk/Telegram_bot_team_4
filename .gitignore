@@ -12,3 +12,7 @@ __pycache__/
 
 # additional files
 docs.txt
+
+
+src/.handler-saves
+src/data

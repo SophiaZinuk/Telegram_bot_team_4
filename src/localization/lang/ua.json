@@ -1,0 +1,18 @@
+{
+  "choose_option": "Виберіть опцію",
+  "create_application": "Створити заявку",
+  "applications_status": "Стан заявок",
+  "security_contacts": "Контакти охорони",
+  "logout": "Вийти",
+  "share_contacts": "Поділитись контактами",
+  "send_number_or_share_contacts": "Відправте Ваш номер телефону або поділіться контактами, щоб авторизуватись",
+  "something_went_wrong": "Упс, щось пішло не так",
+  "could_not_get_phone_number": "Не змогли отримати ваш номер телефону",
+  "logged_out_successfully": "Ви успішно вилогінились :)",
+  "you_have_already_logged_out": "Ви вже й так вилогінились. Немає потреби робити це знову ;)",
+  "login_successful": "Авторизація прошла успішно",
+  "use_description": "почати спілкування з ботом",
+  "about_description": "дізнатися більше про бота",
+  "use_following_commands": "Будь ласка, використовуйте наступні команди",
+  "about_bot": "Цей чудовий бот значно спростить процес подання заявок у нашому ЖК."
+}
