@@ -1,5 +1,7 @@
 import telebot
 from telebot import types
+import google_sheets 
+import markups
 
 
 
@@ -7,11 +9,21 @@ TOKEN_BOT='6093636754:AAEXctCKEmEVM-nhms6g7ss8t7huY4wRPq0'
 
 bot=telebot.TeleBot(TOKEN_BOT)
 
+
 #start
 @bot.message_handler(commands=['start'])
 def start(message):
-    mes=f'Hello, {message.from_user.first_name}'
+    mes=f'Привіт, {message.from_user.first_name}! Вас вітає ЖК Мрія.'
     bot.send_message(message.chat.id, mes)
+    id_user=message.from_user.id
+    #check in db_tenants
+    if google_sheets.is_user_telegram(id_user)==False:
+        bot.send_message(message.chat.id, 'З поверненням!') 
+    else:
+        #show button 'registration', 'cancel'
+        markup=markups.registration()
+        bot.send_message(message.chat.id, 'Бажаєте зареєструватись?', reply_markup=markup)
+
 
 '''#get text
 @bot.message_handler(content_types=['text'])
@@ -20,7 +32,7 @@ def get_user_text(message):
         bot.send_message(message.chat.id, message.from_user.id)
     else:
         bot.send_message(message.chat.id, "I don't understand you")
-'''
+
 
 #get photo
 @bot.message_handler(content_types='photo')
@@ -43,6 +55,6 @@ def submit(message):
     markup.add(call, taxi)
     bot.send_message(message.chat.id, 'Go!', reply_markup=markup)
 
-
+'''
 
 bot.polling(non_stop=True)
