@@ -23,7 +23,9 @@
   "back": "Back",
   "authorize_first": "Please, authorize first",
   "choose_application_type": "Choose application type",
-  "auth_failed": "Authorization failed"
+  "auth_failed": "Authorization failed",
+  "your_application_accepted_by_address": "Your application was accepted by address"
+
 
 
 

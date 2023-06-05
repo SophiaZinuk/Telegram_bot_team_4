@@ -23,6 +23,7 @@
   "back": "Назад",
   "authorize_first": "Будь ласка авторизуйтесь",
   "choose_application_type": "Оберіть тип заявки",
-  "auth_failed": "Вибачте, вашого номера немає в базі :("
+  "auth_failed": "Вибачте, вашого номера немає в базі :(",
+  "your_application_accepted_by_address": "Ваша заявка успішно прийнята за адресою"
 
 }

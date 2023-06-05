@@ -1,7 +1,8 @@
 from typing import Optional, Tuple
 
 from sqlalchemy.orm import Session
-from db.model.user import User
+
+from db.model.model import User
 
 
 class UserService:
@@ -11,6 +12,13 @@ class UserService:
 
     def find_user_by_phone_number(self, phone_number: str) -> Optional[User]:
         query = self.session.query(User).filter_by(phone_number=phone_number)
+        user_tuple: Optional[Tuple[User]] = self.session.execute(query).first()
+        if user_tuple is not None:
+            return user_tuple[0]
+        return None
+
+    def find_user_by_id(self, id: int) -> Optional[User]:
+        query = self.session.query(User).filter_by(id=id)
         user_tuple: Optional[Tuple[User]] = self.session.execute(query).first()
         if user_tuple is not None:
             return user_tuple[0]

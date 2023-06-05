@@ -3,7 +3,7 @@ from typing import Optional
 from telebot import TeleBot
 from telebot import types
 
-from db.model.user import User
+from db.model.model import User
 from localization.localization import Localization
 from menu.menu_manager import MenuManager
 from menu.menu_type import MenuType
@@ -78,7 +78,7 @@ class AuthConversation:
         user_by_phone_number: Optional[User] = self.user_service.find_user_by_phone_number(phone_number)
         if user_by_phone_number is None:
             return False
-        user_state = UserState(msg.chat.id, msg.from_user.id)
+        user_state = UserState(msg.chat.id, msg.from_user.id, user_by_phone_number.id)
         user_state.authorized = True
         self.user_state_manager.update_state(user_state)
         return True

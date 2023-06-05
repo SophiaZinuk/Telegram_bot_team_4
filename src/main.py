@@ -4,6 +4,7 @@ from telebot import TeleBot
 from telebot import types
 
 from conversation.auth_conversation import AuthConversation
+from db.service.application_service import ApplicationService
 from localization.language import Language
 from localization.localization import Localization
 from menu.menu_manager import MenuManager
@@ -30,6 +31,7 @@ Session = sessionmaker(bind=engine)
 session: Session = Session()
 
 user_service: UserService = UserService(session)
+application_service: ApplicationService = ApplicationService(session)
 
 # bot
 bot: TeleBot = telebot.TeleBot(API_TOKEN)
@@ -49,7 +51,8 @@ user_state_manager: UserStateManager = UserStateManager()
 # conversations
 auth_conversation: AuthConversation = AuthConversation(bot, localization, menu_manager, user_state_manager,
                                                        user_service)
-taxi_conversation: TaxiConversation = TaxiConversation(bot, localization, menu_manager, user_state_manager)
+taxi_conversation: TaxiConversation = TaxiConversation(bot, localization, menu_manager, user_state_manager,
+                                                       application_service, user_service)
 
 # handlers
 command_handler: CommandHandler = CommandHandler(bot, auth_conversation, localization)

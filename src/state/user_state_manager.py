@@ -3,7 +3,7 @@ from state.user_state import UserState
 import jsonpickle
 import os
 from menu.menu_type import MenuType
-
+from state.taxi_application_state import TaxiApplicationState
 
 class UserStateManager:
 
@@ -45,11 +45,18 @@ class UserStateManager:
         state: UserState = self.get_state(user_id)
         if state is not None:
             state.menu[msg_id] = menu
-        self.update_state(state)
+            self.update_state(state)
 
     def is_user_authorized(self, user_id: int) -> bool:
         user_state = self.get_state(user_id)
         if user_state is None:
             return False
         return user_state.authorized
+
+    def update_taxi_application(self, user_id: int, taxi_application: TaxiApplicationState) -> None:
+        user_state = self.get_state(user_id)
+        if user_state is not None:
+            user_state.taxi_application = taxi_application
+            self.update_state(user_state)
+
 
