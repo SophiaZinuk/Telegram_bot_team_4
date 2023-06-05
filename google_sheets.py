@@ -31,7 +31,7 @@ def is_correct_number(message:str)->str:
     if len(message) in range(*LEN_OF_NUMBER) and message[-10:].isdigit():
         return message.strip()[-10:]
     else:
-        return 'Enter correct number!'
+        return False
     
 
 # check number of telephon in tenant_database
@@ -49,21 +49,36 @@ def is_user_telegram(user_id)->bool:
     users_telegram=db_sheets[1]
     return True if str(user_id) not in users_telegram.col_values(col=1) else False
 
-def add_user_id(user_id)->bool:
+
+# add user_telegram_id and telephone into table
+def add_user_id(user_id, telephone)->bool:
     db_sheets=autorize()
     users_telegram=db_sheets[1]
-      
-    users_telegram.append_row(values=(user_id))
+    users_telegram.append_row(values=(user_id, telephone))
         
-
-
 ### /end Registration
 
-#
+
+#### Request/
+def security_contact()->str:
+    db_sheets=autorize()
+    security=db_sheets[2]
+    tel= security.cell(2,4).value
+    return f'Звернутися до охорони можна за телефоном: {tel}'
+
+def add_request(*args):
+    pass
+
+def get_state_request(id_user, id_request):
+    states=('В обробці', 'Оброблено', 'Відхилено')
+    pass
+
+#### /end Request
 
 
 #Tests 
 
+print(security_contact())
 #values=('236248', '56253525524458')
 #print(add_user_id(*values))
 
