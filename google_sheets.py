@@ -66,6 +66,27 @@ def security_contact()->str:
     tel= security.cell(2,4).value
     return f'Звернутися до охорони можна за телефоном: {tel}'
 
+def get_telephone(id_user_telegr):
+    db_sheets=autorize()
+    telegram=db_sheets[1]
+    telephone=[str(row['telephon']) for row in telegram.get_all_records() if str(id_user_telegr) in str(row['id_user_telegram'])]
+    return telephone[0]
+
+def get_adress(id_user_telegr):
+    db_sheets=autorize()
+    info_tenants=db_sheets[0]    
+    tel=get_telephone(id_user_telegr)
+    adress=[row['adress'] for row in info_tenants.get_all_records() if tel in str(row['telephon'])]
+    return adress[0]
+
+def get_id_rqst():
+    db_sheets=autorize()
+    rqst=db_sheets[4]
+    last_id=rqst.get_values()[-1][0]
+    return last_id+1 if isinstance(last_id, int) else 1
+
+
+
 def add_request(*args):
     pass
 
@@ -77,8 +98,9 @@ def get_state_request(id_user, id_request):
 
 
 #Tests 
-
-print(security_contact())
+#print(get_last_id_rqst())
+#get_adress('6259460200')
+#print(security_contact())
 #values=('236248', '56253525524458')
 #print(add_user_id(*values))
 
