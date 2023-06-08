@@ -83,12 +83,15 @@ def get_id_rqst():
     db_sheets=autorize()
     rqst=db_sheets[4]
     last_id=rqst.get_values()[-1][0]
-    return last_id+1 if isinstance(last_id, int) else 1
+    id=int(last_id)+1 if last_id.strip().isdigit() else 1
+    return id
 
 
 
-def add_request(*args):
-    pass
+def add_request(request: tuple):
+    db_sheets=autorize()
+    rqst=db_sheets[4]
+    rqst.append_row(values=request)
 
 def get_state_request(id_user, id_request):
     states=('В обробці', 'Оброблено', 'Відхилено')
@@ -98,7 +101,7 @@ def get_state_request(id_user, id_request):
 
 
 #Tests 
-#print(get_last_id_rqst())
+#print(get_id_rqst())
 #get_adress('6259460200')
 #print(security_contact())
 #values=('236248', '56253525524458')

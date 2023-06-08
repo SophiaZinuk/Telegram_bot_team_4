@@ -75,40 +75,37 @@ def request(call):
         return
 
 
-def create_rq(user_avto): #!!!!!!redone
-    rqst={'id_request': google_sheets.get_id_rqst(), #number of previos id+1
-           'id_user': user_avto.from_user.id, 
-           'adress': google_sheets.get_adress(user_avto.from_user.id), 
-           'telephone': google_sheets.get_telephone(user_avto.from_user.id),
-           'target':rqst[0],
-           'num_avto': rqst[1], 
-           'message': rqst[2], #??
-           'date': user_avto.date,
-           'status': 0
-           }
+def create_rq(message, target, number_avto): #!!!!!!redone
     
-    rqst_text=str([str(i)+': '+str(j) for i,j in rqst.items()])
-    return rqst_text
+    request=( google_sheets.get_id_rqst(), #id_request of previous id+1
+             message.from_user.id, # id_user
+             google_sheets.get_adress(message.from_user.id), # user adress
+             google_sheets.get_telephone(message.from_user.id), # user telephone
+             target, # target of request
+             number_avto, # avto number
+             message.text, # additional info
+             message.date, # date of request
+             0 # status
+            )
+    google_sheets.add_request(request)
+    
+    bot.send_message(message.chat.id, text=f'Ваша заявка № {request[0]} прийнята!')
 
 
-def add_number_avto(id_user):
-    #rqst.append(id_user.text)
-    mes=bot.send_message(id_user.chat.id, text='Введіть additioanal info')
-    bot.register_next_step_handler(mes, add_message)
+def add_number_avto(id_user, target):
+    number_avto=id_user.text
+    mes=bot.send_message(id_user.chat.id, text='Введіть додаткову інформацію')
+    bot.register_next_step_handler(mes, create_rq, target, number_avto)
 
-def add_message(id_user):    
-    #rqst.append(id_user.text)
-    info='create_rq(id_user)'
-    bot.send_message(id_user.chat.id, text=info)
 
 @bot.callback_query_handler(func=lambda call: call.data in ('trg_taxi','trg_curier','trg_guests', 'trg_parking_problem','trg_other'))
 def target(call):
     if call.data=='trg_taxi':
-        
+        target='Таксі'
         bot.answer_callback_query(call.id, 'Ok')
         avto=bot.send_message(call.message.chat.id, text='Введіть номер авто')
-                        
-        bot.register_next_step_handler(avto, add_number_avto) #!!next input message
+                       
+        bot.register_next_step_handler(avto, add_number_avto, target) #!!next input message
        
 
     elif call.data=='trg_curier':
