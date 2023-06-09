@@ -95,12 +95,19 @@ def add_request(request: tuple):
 
 def get_state_request(id_user, id_request):
     states=('В обробці', 'Оброблено', 'Відхилено')
-    pass
+    db_sheets=autorize()
+    rqst=db_sheets[4]
+    for row in rqst.get_all_records():
+        if row['id_user']==id_user and row['id_request']==id_request :
+            return states[row['status']]    
+    return 'Заявку не знайдено!'
+    
 
 #### /end Request
 
 
 #Tests 
+#print(get_state_request(id_user=6259460200, id_request=1))
 #print(get_id_rqst())
 #get_adress('6259460200')
 #print(security_contact())

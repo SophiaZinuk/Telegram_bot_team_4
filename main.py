@@ -72,9 +72,18 @@ def requests(call):
         bot.send_message(call.message.chat.id, text='Оберіть мету заявки:', reply_markup=markups.keyboard_target())
         return
     elif call.data=='rq_state':
-        #!!!!check request and send request_state
-        return
+        
+        #input number of requsest
+        number=bot.send_message(call.message.chat.id, text='Введіть номер заявки')
+        bot.register_next_step_handler(number, get_status_request)
+        
 
+def get_status_request(number):
+    if number.text.strip().isdigit():
+        text=google_sheets.get_state_request(id_user=number.from_user.id, id_request=int(number.text))
+    else:
+       text='Введено некорректні дані!'
+    bot.send_message(number.from_user.id, text=f'Статус заявки № {number.text} "{text}"')
 
 def create_rq(message, target, number_avto): #!!!!!!redo
     
