@@ -30,3 +30,24 @@ def keyboard_target():
     markup=types.InlineKeyboardMarkup()    
     markup.add(*[types.InlineKeyboardButton(text=buttons[i], callback_data=answers[i]) for i in range(len(buttons))])
     return markup
+
+def keyboard_curier():
+    buttons=('Кур’єр без авто','Кур’єр з авто')
+    answers=('curier_no','curier_yes')
+    markup=types.InlineKeyboardMarkup()    
+    markup.add(*[types.InlineKeyboardButton(text=buttons[i], callback_data=answers[i]) for i in range(len(buttons))])
+    return markup
+
+def keyboard_guests():
+    buttons=('Гості без авто','Гості з авто')
+    answers=('guests_no','guests_yes')
+    markup=types.InlineKeyboardMarkup()    
+    markup.add(*[types.InlineKeyboardButton(text=buttons[i], callback_data=answers[i]) for i in range(len(buttons))])
+    return markup
+
+def keyboard_problem_parking():
+    buttons=('Ваш авто заблокований','Авто в недозволеному місці')
+    answers=('auto_blocked','auto_incorrect_place')
+    markup=types.InlineKeyboardMarkup()    
+    markup.add(*[types.InlineKeyboardButton(text=buttons[i], callback_data=answers[i]) for i in range(len(buttons))])
+    return markup

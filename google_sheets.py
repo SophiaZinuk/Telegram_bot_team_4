@@ -63,14 +63,14 @@ def add_user_id(user_id, telephone)->bool:
 def security_contact()->str:
     db_sheets=autorize()
     security=db_sheets[2]
-    tel= security.cell(2,4).value
+    tel=str(security.cell(2,4).value)
     return f'Звернутися до охорони можна за телефоном: {tel}'
 
 def get_telephone(id_user_telegr):
     db_sheets=autorize()
     telegram=db_sheets[1]
     telephone=[str(row['telephon']) for row in telegram.get_all_records() if str(id_user_telegr) in str(row['id_user_telegram'])]
-    return telephone[0]
+    return str(telephone[0])
 
 def get_adress(id_user_telegr):
     db_sheets=autorize()
