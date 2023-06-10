@@ -158,18 +158,17 @@ def add_kpp(id_user):
 def handler_kpp(call): 
     if call.data=='kpp_first':
         bot.answer_callback_query(call.id, 'Good') 
-        dict_rqst['kpp']='first kpp'
+        dict_rqst['kpp']='Перший КПП'
     elif call.data=='kpp_second':
         bot.answer_callback_query(call.id, 'Good') 
-        dict_rqst['kpp']='second kpp'
+        dict_rqst['kpp']='Другий КПП'
     elif call.data=='kpp_undef':
         bot.answer_callback_query(call.id, 'Good') 
-        dict_rqst['kpp']='undefined kpp'
+        dict_rqst['kpp']='Невідомий'
     
     mes=bot.send_message(call.message.chat.id, text='Ваша заявка напрвлена в обробку')
     create_rq(mes)
-    #bot.register_next_step_handler(mes, create_rq)   ##!!!!!!!
-#!!!!!!!!!!!!
+    
 
 @bot.callback_query_handler(func=lambda call: call.data in ('curier_no','curier_yes'))
 def handler_curier(call):       
@@ -228,6 +227,8 @@ def create_rq(message): #  !!!! redo add KPP
     bot.send_message(message.chat.id, text=f'Ваша заявка № {request[0]} прийнята!')
 
 
+bot.polling(non_stop=True)
+
 '''   
 
 @bot.callback_query_handler(func=lambda callback: callback=callback.data)
@@ -267,4 +268,4 @@ def submit(message):
 
 '''
 
-bot.polling(non_stop=True)
+
