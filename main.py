@@ -9,6 +9,12 @@ TOKEN_BOT='6093636754:AAEXctCKEmEVM-nhms6g7ss8t7huY4wRPq0'
 
 bot=telebot.TeleBot(TOKEN_BOT)
 
+## ['id_request', 'id_user', 'adress', 'telephone', 'target', 'number of avto', 'additional info', 'kpp', 'date', 'status']
+HEAD_RQST_SHEET=google_sheets.get_head()
+dict_rqst=dict()
+
+
+
 
 #start
 @bot.message_handler(commands=['start','use'])
@@ -29,7 +35,7 @@ def start(message):
 
 
 @bot.callback_query_handler(func=lambda call: call.data in ('rg_yes', 'rg_no'))
-def registration(call):
+def handler_registration(call):
     if call.data=='rg_yes':
         bot.answer_callback_query(call.id, 'Good')
         mes_for_tel_number='Відправте Ваш номер телефону для реєстрації у боті.'
@@ -68,100 +74,44 @@ def requests(call):
         bot.send_message(call.message.chat.id, text=google_sheets.security_contact())
         return
     elif call.data=='rq_create':
+        dict_rqst=dict()
         bot.answer_callback_query(call.id, 'Ok')
         bot.send_message(call.message.chat.id, text='Оберіть мету заявки:', reply_markup=markups.keyboard_target())
         return
-    elif call.data=='rq_state':
-        
+    elif call.data=='rq_state':        
         #input number of requsest
         number=bot.send_message(call.message.chat.id, text='Введіть номер заявки')
         bot.register_next_step_handler(number, get_status_request)
-        
+        return
+
+#!!???
+def add_to_new_request(mes, New_request: list):
+    return New_request.append(mes)       
 
 def get_status_request(number):
     if number.text.strip().isdigit():
         text=google_sheets.get_state_request(id_user=number.from_user.id, id_request=int(number.text))
     else:
-       text='Введено некорректні дані!'
+        text='Введено некорректні дані!'
     bot.send_message(number.from_user.id, text=f'Статус заявки № {number.text} "{text}"')
-
-def create_rq(message, target, number_avto): #!!!!!!redo
-    
-    request=( google_sheets.get_id_rqst(), #id_request of previous id+1
-             message.from_user.id, # id_user
-             google_sheets.get_adress(message.from_user.id), # user adress
-             google_sheets.get_telephone(message.from_user.id), # user telephone
-             target, # target of request
-             number_avto, # avto number
-             message.text, # additional info
-             message.date, # date of request
-             0 # status
-            )
-    google_sheets.add_request(request)    
-    bot.send_message(message.chat.id, text=f'Ваша заявка № {request[0]} прийнята!')
-
-
-def add_number_avto(id_user, target):
-    number_avto=id_user.text
-    mes=bot.send_message(id_user.chat.id, text='Введіть додаткову інформацію')
-    bot.register_next_step_handler(mes, create_rq, target, number_avto)
-
-@bot.callback_query_handler(func=lambda call: call.data in ('curier_no','curier_yes'))
-def handler_curier(call):
-       
-    if call.data=='curier_no':
-        target='Кур’єр без авто' 
-        bot.answer_callback_query(call.id, 'Good')      
-        nubmer_avto=None
-        info=bot.send_message(call.message.chat.id, text='Введіть інформацію про кур’єра:')
-        bot.register_next_step_handler(info, create_rq, target, nubmer_avto)
-
-    elif call.data=='curier_yes':
-        target='Кур’єр з авто' 
-        bot.answer_callback_query(call.id, 'Ok')
-        avto=bot.send_message(call.message.chat.id, text='Введіть номер авто')                       
-        bot.register_next_step_handler(avto, add_number_avto, target) # next input message
-       
-@bot.callback_query_handler(func=lambda call: call.data in ('guests_no','guests_yes'))
-def handler_guests(call):
-      
-    if call.data=='guests_no':
-        target='Гості без авто'  
-        bot.answer_callback_query(call.id, 'Good')      
-        nubmer_avto=None
-        info=bot.send_message(call.message.chat.id, text='Введіть інформацію щодо гостей:')
-        bot.register_next_step_handler(info, create_rq, target, nubmer_avto)
-
-    elif call.data=='guests_yes':
-        target='Гості з авто' 
-        bot.answer_callback_query(call.id, 'Ok')
-        avto=bot.send_message(call.message.chat.id, text='Введіть номер авто')                       
-        bot.register_next_step_handler(avto, add_number_avto, target) # next input message 
-
-
-@bot.callback_query_handler(func=lambda call: call.data in ('auto_blocked','auto_incorrect_place'))
-def handler_parking(call):
-      
-    if call.data=='auto_blocked':
-        target='Проблеми з парковкою. Ваш авто заблокований' 
-        bot.answer_callback_query(call.id, 'Good')      
-        avto=bot.send_message(call.message.chat.id, text='Введіть номер авто')                       
-        bot.register_next_step_handler(avto, add_number_avto, target) # next input message 
-
-    elif call.data=='auto_incorrect_place':
-        target='Проблеми з парковкою. Авто в недозволеному місці' 
-        bot.answer_callback_query(call.id, 'Ok')
-        avto=bot.send_message(call.message.chat.id, text='Введіть номер авто')                       
-        bot.register_next_step_handler(avto, add_number_avto, target) # next input message 
 
 
 @bot.callback_query_handler(func=lambda call: call.data in ('trg_taxi','trg_curier','trg_guests', 'trg_parking_problem','trg_other'))
-def target(call):
+def handler_target(call):
+    ## ['id_request', 'id_user', 'adress', 'telephone', 'target', 'number of avto', 'additional info', 'kpp', 'date', 'status']
+    dict_rqst['id_request']=google_sheets.get_id_rqst()
+    dict_rqst['id_user']=call.message.chat.id
+    dict_rqst['adress']= google_sheets.get_adress(call.message.chat.id)
+    dict_rqst['telephone']=google_sheets.get_telephone(call.message.chat.id)
+    dict_rqst['date']=call.message.date
+    dict_rqst['status']=0
+
     if call.data=='trg_taxi':
-        target='Таксі'
+        dict_rqst['target']='Таксі'
         bot.answer_callback_query(call.id, 'Ok')
-        avto=bot.send_message(call.message.chat.id, text='Введіть номер авто')                       
-        bot.register_next_step_handler(avto, add_number_avto, target) # next input message
+        num_auto=bot.send_message(call.message.chat.id, text='Введіть номер авто')  
+                      
+        bot.register_next_step_handler(num_auto, add_num_auto) # next input message
             
 
     elif call.data=='trg_curier':        
@@ -176,12 +126,106 @@ def target(call):
         bot.send_message(call.message.chat.id, text='Виберіть опцію для Проблеми з парковкою', reply_markup=markups.keyboard_problem_parking())
     
     elif call.data=='trg_other':
-        target='Інше'
-        bot.answer_callback_query(call.id, 'Good')      
-        nubmer_avto=None
+        bot.answer_callback_query(call.id, 'Good') 
+        dict_rqst['target']='Інше'
+        dict_rqst['number of avto']=None                 
+        
         info=bot.send_message(call.message.chat.id, text='Введіть інформацію:')
-        bot.register_next_step_handler(info, create_rq, target, nubmer_avto)
+        bot.register_next_step_handler(info, add_kpp) 
 
+
+def add_num_auto(message): 
+    dict_rqst['number of avto']=message.text
+    bot.send_message(message.chat.id, text='Бажаєте ввести додаткову інформацію?', reply_markup=markups.keyboard_additional_info()) 
+  
+
+@bot.callback_query_handler(func=lambda call: call.data in ('info_yes','info_no'))
+def handler_target(call):
+    if call.data=='info_yes':
+        info=bot.send_message(call.message.chat.id, text='Введіть додаткову інформацію')
+        bot.register_next_step_handler(info, add_kpp)
+    elif call.data=='info_no':
+        dict_rqst['additional info']=''
+        bot.send_message(call.message.chat.id, text='Оберіть КПП:', reply_markup=markups.keyboard_select_kpp())
+
+
+def add_kpp(id_user):
+    dict_rqst['additional info']=id_user.text
+    bot.send_message(id_user.chat.id, text='Оберіть КПП:', reply_markup=markups.keyboard_select_kpp())    
+    
+
+@bot.callback_query_handler(func=lambda call: call.data in ('kpp_first','kpp_second', 'kpp_undef'))
+def handler_kpp(call): 
+    if call.data=='kpp_first':
+        bot.answer_callback_query(call.id, 'Good') 
+        dict_rqst['kpp']='first kpp'
+    elif call.data=='kpp_second':
+        bot.answer_callback_query(call.id, 'Good') 
+        dict_rqst['kpp']='second kpp'
+    elif call.data=='kpp_undef':
+        bot.answer_callback_query(call.id, 'Good') 
+        dict_rqst['kpp']='undefined kpp'
+    
+    mes=bot.send_message(call.message.chat.id, text='Ваша заявка напрвлена в обробку')
+    create_rq(mes)
+    #bot.register_next_step_handler(mes, create_rq)   ##!!!!!!!
+#!!!!!!!!!!!!
+
+@bot.callback_query_handler(func=lambda call: call.data in ('curier_no','curier_yes'))
+def handler_curier(call):       
+    if call.data=='curier_no':
+        bot.answer_callback_query(call.id, 'Good') 
+
+        dict_rqst['target']='Кур’єр без авто'              
+        dict_rqst['number of avto']=None
+        info=bot.send_message(call.message.chat.id, text='Введіть інформацію про кур’єра:')
+        bot.register_next_step_handler(info, add_kpp)
+
+    elif call.data=='curier_yes':
+        bot.answer_callback_query(call.id, 'Ok')
+        dict_rqst['target']='Кур’єр з авто'         
+        num_auto=bot.send_message(call.message.chat.id, text='Введіть номер авто')                       
+        bot.register_next_step_handler(num_auto, add_num_auto) # next input message
+
+
+@bot.callback_query_handler(func=lambda call: call.data in ('guests_no','guests_yes'))
+def handler_guests(call):      
+    if call.data=='guests_no':
+        bot.answer_callback_query(call.id, 'Good') 
+        dict_rqst['target']='Гості без авто'  
+        dict_rqst['number of avto']=None
+        info=bot.send_message(call.message.chat.id, text='Введіть інформацію щодо гостей:')
+        bot.register_next_step_handler(info, add_kpp)
+
+    elif call.data=='guests_yes':
+        bot.answer_callback_query(call.id, 'Ok')
+        dict_rqst['target']='Гості з авто'
+        num_auto=bot.send_message(call.message.chat.id, text='Введіть номер авто')                       
+        bot.register_next_step_handler(num_auto, add_num_auto) # next input message 
+
+
+@bot.callback_query_handler(func=lambda call: call.data in ('auto_blocked','auto_incorrect_place'))
+def handler_parking(call): 
+    target='Проблеми з парковкою.'     
+    if call.data=='auto_blocked':
+        target+=' Ваш авто заблокований' 
+    elif call.data=='auto_incorrect_place':
+        target+=' Авто в недозволеному місці'
+
+    bot.answer_callback_query(call.id, 'Ok')
+    dict_rqst['target']=target
+    num_auto=bot.send_message(call.message.chat.id, text='Введіть номер авто')                       
+    bot.register_next_step_handler(num_auto, add_num_auto) # next input message 
+
+
+
+
+def create_rq(message): #  !!!! redo add KPP
+    request=[]
+    for i in HEAD_RQST_SHEET:
+        request.append(dict_rqst[i]) if i in dict_rqst.keys() else request.append(None)    
+    google_sheets.add_request(request)    
+    bot.send_message(message.chat.id, text=f'Ваша заявка № {request[0]} прийнята!')
 
 
 '''   

@@ -70,7 +70,7 @@ def get_telephone(id_user_telegr):
     db_sheets=autorize()
     telegram=db_sheets[1]
     telephone=[str(row['telephon']) for row in telegram.get_all_records() if str(id_user_telegr) in str(row['id_user_telegram'])]
-    return str(telephone[0])
+    return telephone[0]
 
 def get_adress(id_user_telegr):
     db_sheets=autorize()
@@ -86,8 +86,6 @@ def get_id_rqst():
     id=int(last_id)+1 if last_id.strip().isdigit() else 1
     return id
 
-
-
 def add_request(request: tuple):
     db_sheets=autorize()
     rqst=db_sheets[4]
@@ -102,11 +100,16 @@ def get_state_request(id_user, id_request):
             return states[row['status']]    
     return 'Заявку не знайдено!'
     
+def get_head():
+    db_sheets=autorize()
+    rqst=db_sheets[4]
+    return rqst.row_values(1)
 
 #### /end Request
 
 
 #Tests 
+#print(get_head())
 #print(get_state_request(id_user=6259460200, id_request=1))
 #print(get_id_rqst())
 #get_adress('6259460200')

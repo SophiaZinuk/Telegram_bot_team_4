@@ -51,3 +51,17 @@ def keyboard_problem_parking():
     markup=types.InlineKeyboardMarkup()    
     markup.add(*[types.InlineKeyboardButton(text=buttons[i], callback_data=answers[i]) for i in range(len(buttons))])
     return markup
+
+def keyboard_select_kpp():
+    buttons=('Перший КПП','Другий КПП','Невідомий')
+    answers=('kpp_first','kpp_second', 'kpp_undef')
+    markup=types.InlineKeyboardMarkup()    
+    markup.add(*[types.InlineKeyboardButton(text=buttons[i], callback_data=answers[i]) for i in range(len(buttons))])
+    return markup
+
+def keyboard_additional_info():
+    buttons=('Так',' Ні')
+    answers=('info_yes','info_no')
+    markup=types.InlineKeyboardMarkup()    
+    markup.add(*[types.InlineKeyboardButton(text=buttons[i], callback_data=answers[i]) for i in range(len(buttons))])
+    return markup
