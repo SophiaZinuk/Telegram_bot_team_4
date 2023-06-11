@@ -31,7 +31,8 @@ class AuthConversation:
         self.user_service = user_service
 
     def start_conversation(self, message: types.Message):
-        user_state: Optional[UserState] = self.user_state_manager.get_state(message.from_user.id)
+        user_state: Optional[UserState] = self.user_state_manager.get_state(
+            message.from_user.id)
         is_authorized: bool = False if user_state is None else user_state.authorized
         if is_authorized:
             menu_type: MenuType = MenuType.MAIN_ADMIN if user_state.is_admin else MenuType.MAIN
@@ -39,18 +40,22 @@ class AuthConversation:
                 message.chat.id,
                 self.localization.lang['choose_option'],
                 reply_markup=self.menu_manager.get_menu_markup(menu_type))
-            self.user_state_manager.update_menu(message.from_user.id, msg.id, MenuState(menu_type))
+            self.user_state_manager.update_menu(
+                message.from_user.id, msg.id, MenuState(menu_type))
         else:
             msg = self.bot.send_message(
                 message.chat.id,
                 self.localization.lang['send_number_or_share_contacts'],
                 reply_markup=self.menu_manager.get_menu_markup(MenuType.START))
-            self.bot.register_next_step_handler(msg, self._process_phone_number)
+            self.bot.register_next_step_handler(
+                msg, self._process_phone_number)
 
     def _process_phone_number(self, message: types.Message):
         try:
             phone_number = self._get_phone_number(message)
-            user: Optional[User] = self._auth_user(message, phone_number)
+            formated_phone_number = self._modify_phone_number(phone_number)
+            user: Optional[User] = self._auth_user(
+                message, formated_phone_number)
             auth_successful: bool = user is not None
             if auth_successful:
                 menu_type: MenuType = self._get_proper_menu_markup(user)
@@ -62,7 +67,8 @@ class AuthConversation:
                     message.chat.id,
                     self.localization.lang['choose_option'],
                     reply_markup=self.menu_manager.get_menu_markup(menu_type))
-                self.user_state_manager.update_menu(message.from_user.id, msg.id, MenuState(menu_type))
+                self.user_state_manager.update_menu(
+                    message.from_user.id, msg.id, MenuState(menu_type))
             else:
                 self.bot.send_message(
                     message.chat.id,
@@ -81,10 +87,12 @@ class AuthConversation:
         if phone_number is None:
             return None
 
-        user_by_phone_number: Optional[User] = self.user_service.find_user_by_phone_number(phone_number)
+        user_by_phone_number: Optional[User] = self.user_service.find_user_by_phone_number(
+            phone_number)
         if user_by_phone_number is None:
             return None
-        user_state = UserState(msg.chat.id, msg.from_user.id, user_by_phone_number.id)
+        user_state = UserState(
+            msg.chat.id, msg.from_user.id, user_by_phone_number.id)
         user_state.authorized = True
         user_state.is_admin = user_by_phone_number.user_type == UserType.ADMIN
         self.user_state_manager.update_state(user_state)
@@ -104,3 +112,11 @@ class AuthConversation:
             return MenuType.MAIN_ADMIN
         return MenuType.MAIN
 
+    def _modify_phone_number(self, phone_number: str) -> Optional[str]:
+        if phone_number is None:
+            return None
+        result: str = phone_number
+        firts_symbol: str = phone_number.split()[0]
+        if firts_symbol != '+':
+            result = '+' + result
+        return result
