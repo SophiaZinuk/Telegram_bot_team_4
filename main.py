@@ -61,7 +61,8 @@ def sec_exec(message):
     if id_rqst.strip().isdigit():
         
         if int(id_rqst) in google_sheets.sec_get_list_id_requests():
-            bot.send_message(message.chat.id, text=f'Оберіть дію для заявки № {id_rqst}', reply_markup=markups.sec_keyboard_exec_rqst())
+            bot.send_message(message.chat.id, text='Оберіть дію для заявки № ')
+            bot.send_message(message.chat.id, text=id_rqst, reply_markup=markups.sec_keyboard_exec_rqst())
         else:
             bot.send_message(message.chat.id, text='Заявка виконана або не існує')
             bot.send_message(message.chat.id, text='Оберіть дію', reply_markup=markups.sec_keyboard_get_requests())
@@ -71,12 +72,21 @@ def sec_exec(message):
         bot.send_message(message.chat.id, text='Оберіть дію', reply_markup=markups.sec_keyboard_get_requests())
 
 
+##!!REDO
 @bot.callback_query_handler(func=lambda call: call.data in ('sec_exec','sec_cancel'))
 def sec_main_menu_handler(call):
+    id_rqst=call.message.text
     if call.data=='sec_exec':
-        pass
+        if google_sheets.sec_update_rqst(id_rqst=int(id_rqst), state=1):
+            bot.send_message(call.message.chat.id, text='Updated')
+            id_user=google_sheets.sec_get_id_user(int(id_rqst))
+            bot.send_message(chat_id=id_user, text='Your request is executed')
     elif call.data=='sec_cancel':
-        pass
+        if google_sheets.sec_update_rqst(id_rqst=int(id_rqst), state=2):            
+            bot.send_message(call.message.chat.id, text='Canceled')
+            id_user=google_sheets.sec_get_id_user(int(id_rqst))
+            bot.send_message(chat_id=id_user, text='Your request is cancelled')
+    #send result to id_user.chat from requests.sheet
 
 ##### /end security handlers
 

@@ -130,6 +130,8 @@ def get_head():
     rqst=db_sheets[4]
     return rqst.row_values(1)
 
+#ADD history of requests for user
+
 #### /end Request
 
 #### /Security
@@ -151,11 +153,32 @@ def sec_get_list_id_requests():
     sec_rqsts=db_sheets[4]
     list_id_rqsts=[row['id_request'] for row in sec_rqsts.get_all_records() if row['status']==0 ]
     return list_id_rqsts
+
+# change status of request
+def sec_update_rqst(id_rqst:int, state:int):
+    db_sheets=autorize()
+    sec_rqsts=db_sheets[4]
+    for i in range(len(sec_rqsts.col_values(1))):
+        if str(id_rqst)==sec_rqsts.col_values(col=1)[i]:
+            sec_rqsts.update_cell(i+1, 10, state)
+            return True
+    return False
+    
+def sec_get_id_user(id_rqst:int):
+    db_sheets=autorize()
+    sec_rqsts=db_sheets[4]
+    for row in sec_rqsts.get_all_records():
+        if row['id_request']==id_rqst:
+            return row['id_user']
+    return None
+
 #####/end Security
 
 
 #Tests 
-print(type(sec_get_list_id_requests()[0]))
+#print(sec_get_id_user(25))
+#sec_update_rqst(16, 1)
+#print(type(sec_get_list_id_requests()[0]))
 #print(check_security('253556'))
 #print(get_rqst_adress(11))
 #print(get_head())
