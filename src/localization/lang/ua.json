@@ -22,8 +22,24 @@
   "other": "Інше",
   "back": "Назад",
   "authorize_first": "Будь ласка авторизуйтесь",
+  "you_are_admin_auth_as_user": "Ви - адмін. Будь ласка, авторизуйтесь як юзер",
+  "you_are_user_auth_as_admin": "Ви - юзер. Будь ласка, авторизуйтесь як адмін",
   "choose_application_type": "Оберіть тип заявки",
   "auth_failed": "Вибачте, вашого номера немає в базі :(",
-  "your_application_accepted_by_address": "Ваша заявка успішно прийнята за адресою"
-
+  "your_application_accepted_by_address": "Ваша заявка успішно прийнята за адресою",
+  "to_main_menu": "До головного меню",
+  "your_applications": "Ваші заявки",
+  "pending": "В обробці",
+  "approved": "Підтверджено",
+  "rejected": "Відхилено",
+  "type": "Тип",
+  "status": "Статус",
+  "to_applications_list": "До ваших заявок",
+  "application_number": "Номер заявки",
+  "car_number": "Номер машини",
+  "user_address": "Адреса заявника",
+  "all_applications": "Всі заявки",
+  "approve": "Підтвердити",
+  "reject": "Відхилити",
+  "application_status_already_updated": "Заявка вже була оброблена"
 }

@@ -1,9 +1,12 @@
-from typing import Optional
-from state.user_state import UserState
-import jsonpickle
 import os
-from menu.menu_type import MenuType
+from typing import Optional
+
+import jsonpickle
+
+from state.menu_state import MenuState
 from state.taxi_application_state import TaxiApplicationState
+from state.user_state import UserState
+
 
 class UserStateManager:
 
@@ -41,11 +44,17 @@ class UserStateManager:
             print(e)
             return None
 
-    def update_menu(self, user_id: int, msg_id: int, menu: MenuType):
+    def update_menu(self, user_id: int, msg_id: int, menu: MenuState):
         state: UserState = self.get_state(user_id)
         if state is not None:
             state.menu[msg_id] = menu
             self.update_state(state)
+
+    def get_menu_state(self, user_id: int, msg_id: int) -> Optional:
+        state: UserState = self.get_state(user_id)
+        if state is not None:
+            return state.menu.get(str(msg_id))
+        return None
 
     def is_user_authorized(self, user_id: int) -> bool:
         user_state = self.get_state(user_id)
@@ -58,5 +67,3 @@ class UserStateManager:
         if user_state is not None:
             user_state.taxi_application = taxi_application
             self.update_state(user_state)
-
-

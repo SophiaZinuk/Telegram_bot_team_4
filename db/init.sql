@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS applications
     id               serial PRIMARY KEY,
     created_by       INT         NOT NULL,
     application_type VARCHAR(50) NOT NULL,
+    application_status VARCHAR(50) NOT NULL,
     description      VARCHAR(200),
     created_at       TIMESTAMP DEFAULT current_timestamp,
     CONSTRAINT fk_user FOREIGN KEY (created_by) REFERENCES users (id)
@@ -38,3 +39,8 @@ INSERT INTO users (address, user_type, phone_number)
 VALUES ('Бандери 2. кв 12',
         'USER',
         '+3806345343322');
+
+INSERT INTO users (address, user_type, phone_number)
+VALUES ('Бандери 2. кв 12',
+        'ADMIN',
+        '+380939807583');

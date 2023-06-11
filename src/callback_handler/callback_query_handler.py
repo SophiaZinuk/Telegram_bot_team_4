@@ -1,34 +1,42 @@
+import telebot
 from telebot import types
-from callback_handler.callback_type import CallbackType
-from callback_handler.general_callback_query_handler import GeneralCallbackQueryHandler
+from callback_handler.admin.admin_callback_query_handler import AdminCallbackQueryHandler
+from callback_handler.common.common_callback_query_handler import CommonCallbackQueryHandler
+from callback_handler.user.user_callback_query_handler import UserCallbackQueryHandler
+from localization.localization import Localization
 
 
-class CallbackQueryHandler(GeneralCallbackQueryHandler):
+class CallbackQueryHandler:
 
     def __init__(
             self,
-            main_menu_handler: GeneralCallbackQueryHandler,
-            applications_menu_callback_query_handler: GeneralCallbackQueryHandler
+            bot: telebot.TeleBot,
+            localization: Localization,
+            user_callback_query_handler: UserCallbackQueryHandler,
+            admin_callback_query_handler: AdminCallbackQueryHandler,
+            common_callback_query_handler: CommonCallbackQueryHandler
     ):
-        self.main_menu_handler = main_menu_handler
-        self.applications_menu_callback_query_handler = applications_menu_callback_query_handler
-        self._init_handler_mapper()
+        self.bot = bot
+        self.localization = localization
+        self.user_callback_query_handler = user_callback_query_handler
+        self.admin_callback_query_handler = admin_callback_query_handler
+        self.common_callback_query_handler = common_callback_query_handler
 
     def handle(self, callback: types.CallbackQuery):
-        handler: GeneralCallbackQueryHandler = self.handler_mapper[callback.data]
-        handler.handle(callback)
-
-    def _init_handler_mapper(self):
-        self.handler_mapper = dict()
-
-        self.handler_mapper[CallbackType.CREATE_APPLICATION] = self.main_menu_handler
-        self.handler_mapper[CallbackType.APPLICATIONS_STATUS] = self.main_menu_handler
-        self.handler_mapper[CallbackType.SECURITY_CONTACTS] = self.main_menu_handler
-        self.handler_mapper[CallbackType.LOGOUT] = self.main_menu_handler
-
-        self.handler_mapper[CallbackType.TAXI] = self.applications_menu_callback_query_handler
-        self.handler_mapper[CallbackType.CARRIER] = self.applications_menu_callback_query_handler
-        self.handler_mapper[CallbackType.GUESTS] = self.applications_menu_callback_query_handler
-        self.handler_mapper[CallbackType.PARKING_PROBLEMS] = self.applications_menu_callback_query_handler
-        self.handler_mapper[CallbackType.OTHER] = self.applications_menu_callback_query_handler
-        self.handler_mapper[CallbackType.APPLICATIONS_BACK] = self.applications_menu_callback_query_handler
+        try:
+            is_admin_handler: bool = self.admin_callback_query_handler.is_handled(callback)
+            if is_admin_handler:
+                self.admin_callback_query_handler.handle(callback)
+                return
+            is_user_handler: bool = self.user_callback_query_handler.is_handled(callback)
+            if is_user_handler:
+                self.user_callback_query_handler.handle(callback)
+                return
+            is_common_handler: bool = self.common_callback_query_handler.is_handled(callback)
+            if is_common_handler:
+                self.common_callback_query_handler.handle(callback)
+                return
+        except Exception as e:
+            print(e)
+            self.bot.send_message(callback.message.chat.id,
+                                  self.localization.lang['something_went_wrong'])

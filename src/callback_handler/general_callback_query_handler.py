@@ -5,5 +5,5 @@ from telebot import types
 class GeneralCallbackQueryHandler(ABC):
 
     @abstractmethod
-    def handle(self, callback: types.CallbackQuery):
+    def handle(self, callback: types.CallbackQuery) -> None:
         pass

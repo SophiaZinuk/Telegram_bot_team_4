@@ -1,6 +1,7 @@
 from telebot import TeleBot
 from telebot import types
 
+from db.constant.application_status import ApplicationStatus
 from db.constant.application_type import ApplicationType
 from db.model.model import Application, ApplicationData, User
 from db.service.application_service import ApplicationService
@@ -74,6 +75,7 @@ class TaxiConversation:
         application_data.car_number = taxi_number
 
         application.application_type = ApplicationType.TAXI,
+        application.application_status = ApplicationStatus.PENDING
         application.application_data = application_data
         self.application_service.create_application(application)
         return user

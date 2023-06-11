@@ -22,12 +22,24 @@
   "other": "Other",
   "back": "Back",
   "authorize_first": "Please, authorize first",
+  "you_are_admin_auth_as_user": "You are admin. Please authorize as user",
+  "you_are_user_auth_as_admin": "You are user. Please authorize as admin",
   "choose_application_type": "Choose application type",
   "auth_failed": "Authorization failed",
-  "your_application_accepted_by_address": "Your application was accepted by address"
-
-
-
-
-
+  "your_application_accepted_by_address": "Your application was accepted by address",
+  "to_main_menu": "Back to Main Menu",
+  "your_applications": "Your applications",
+  "pending": "Pending",
+  "approved": "Approved",
+  "rejected": "Rejected",
+  "type": "Type",
+  "status": "Status",
+  "to_applications_list": "To applications list",
+  "application_number": "Application number",
+  "car_number": "Car number",
+  "user_address": "User address",
+  "all_applications": "All applications",
+  "approve": "Approve",
+  "reject": "Reject",
+  "application_status_already_updated": "Application status already updated"
 }

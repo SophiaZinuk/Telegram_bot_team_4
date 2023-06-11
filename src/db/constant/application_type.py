@@ -1,2 +1,3 @@
 class ApplicationType:
     TAXI = 'TAXI'
+

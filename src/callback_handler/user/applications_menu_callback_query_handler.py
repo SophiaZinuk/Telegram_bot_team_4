@@ -1,12 +1,13 @@
 from telebot import TeleBot
 from telebot import types
-
 from callback_handler.callback_type import CallbackType
 from callback_handler.general_callback_query_handler import GeneralCallbackQueryHandler
 from conversation.taxi_conversation import TaxiConversation
 from localization.localization import Localization
 from menu.menu_manager import MenuManager
 from menu.menu_type import MenuType
+from state.menu_state import MenuState
+from state.user_state import UserState
 from state.user_state_manager import UserStateManager
 
 
@@ -41,13 +42,21 @@ class ApplicationsMenuCallbackQueryHandler(GeneralCallbackQueryHandler):
 
     def _handle_applications_back(self, callback: types.CallbackQuery):
         self.bot.answer_callback_query(callback_query_id=callback.id)
-        previous_menu_type: MenuType = self.menu_manager.get_previous_menu(MenuType.APPLICATIONS)
+        previous_menu_type: MenuType = self._get_previous_menu(callback)
+        previous_menu: MenuState = MenuState(previous_menu_type)
+
         self.bot.edit_message_text(self.localization.lang['choose_option'],
                                    callback.message.chat.id,
                                    callback.message.message_id,
-                                   reply_markup=self.menu_manager.get_menu(previous_menu_type))
-        self.user_state_manager.update_menu(callback.from_user.id, callback.message.message_id, previous_menu_type)
+                                   reply_markup=self.menu_manager.get_menu_markup(previous_menu_type))
+        self.user_state_manager.update_menu(callback.from_user.id, callback.message.message_id, previous_menu)
 
     def _handle_taxi_application(self, callback: types.CallbackQuery):
         self.bot.answer_callback_query(callback_query_id=callback.id)
         self.taxi_conversation.start_conversation(callback)
+
+    def _get_previous_menu(self, callback: types.CallbackQuery) -> MenuType:
+        user_state: UserState = self.user_state_manager.get_state(callback.from_user.id)
+        if user_state.is_admin:
+            return MenuType.MAIN_ADMIN
+        return MenuType.MAIN
