@@ -84,17 +84,16 @@ def requests(call):
         bot.register_next_step_handler(number, get_status_request)
         return
 
-#!!???
-def add_to_new_request(mes, New_request: list):
-    return New_request.append(mes)       
+     
 
 def get_status_request(number):
     if number.text.strip().isdigit():
         text=google_sheets.get_state_request(id_user=number.from_user.id, id_request=int(number.text))
+        adress=google_sheets.get_rqst_adress(id_request=int(number.text))
     else:
         text='Введено некорректні дані!'
-    bot.send_message(number.from_user.id, text=f'Статус заявки № {number.text} "{text}"')
-
+    bot.send_message(number.from_user.id, text=f'Статус заявки № {number.text} за адресою {adress}: "{text}"')
+    return
 
 @bot.callback_query_handler(func=lambda call: call.data in ('trg_taxi','trg_curier','trg_guests', 'trg_parking_problem','trg_other'))
 def handler_target(call):
@@ -109,21 +108,21 @@ def handler_target(call):
     if call.data=='trg_taxi':
         dict_rqst['target']='Таксі'
         bot.answer_callback_query(call.id, 'Ok')
-        num_auto=bot.send_message(call.message.chat.id, text='Введіть номер авто')  
-                      
+        num_auto=bot.send_message(call.message.chat.id, text='Введіть номер авто')                        
         bot.register_next_step_handler(num_auto, add_num_auto) # next input message
-            
+        return  
 
     elif call.data=='trg_curier':        
         bot.send_message(call.message.chat.id, text='Виберіть опцію для кур`єра', reply_markup=markups.keyboard_curier())
-        
+        return
     
     elif call.data=='trg_guests':        
         bot.send_message(call.message.chat.id, text='Виберіть опцію для Гості', reply_markup=markups.keyboard_guests())
-        
-    elif call.data=='trg_parking_problem':
-        
+        return
+
+    elif call.data=='trg_parking_problem':        
         bot.send_message(call.message.chat.id, text='Виберіть опцію для Проблеми з парковкою', reply_markup=markups.keyboard_problem_parking())
+        return
     
     elif call.data=='trg_other':
         bot.answer_callback_query(call.id, 'Good') 
@@ -131,8 +130,9 @@ def handler_target(call):
         dict_rqst['number of avto']=None                 
         
         info=bot.send_message(call.message.chat.id, text='Введіть інформацію:')
-        bot.register_next_step_handler(info, add_kpp) 
-
+        bot.register_next_step_handler(info, add_kpp)
+        return 
+    return
 
 def add_num_auto(message): 
     dict_rqst['number of avto']=message.text
@@ -140,7 +140,7 @@ def add_num_auto(message):
   
 
 @bot.callback_query_handler(func=lambda call: call.data in ('info_yes','info_no'))
-def handler_target(call):
+def handler_info(call):
     if call.data=='info_yes':
         info=bot.send_message(call.message.chat.id, text='Введіть додаткову інформацію')
         bot.register_next_step_handler(info, add_kpp)

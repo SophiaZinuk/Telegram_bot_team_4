@@ -99,7 +99,16 @@ def get_state_request(id_user, id_request):
         if row['id_user']==id_user and row['id_request']==id_request :
             return states[row['status']]    
     return 'Заявку не знайдено!'
-    
+
+def get_rqst_adress(id_request):
+    db_sheets=autorize()
+    rqst=db_sheets[4]
+    for row in rqst.get_all_records():
+        if row['id_request']==id_request :
+            return row['adress']    
+    return 'Адресу не знайдено!'
+
+
 def get_head():
     db_sheets=autorize()
     rqst=db_sheets[4]
@@ -109,6 +118,7 @@ def get_head():
 
 
 #Tests 
+#print(get_rqst_adress(11))
 #print(get_head())
 #print(get_state_request(id_user=6259460200, id_request=1))
 #print(get_id_rqst())

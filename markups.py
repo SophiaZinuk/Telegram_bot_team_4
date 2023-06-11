@@ -1,14 +1,6 @@
 import telebot
 from telebot import types
 
-'''
-def board_registration():
-    buttons=('Реєстрація', 'Cancel')
-    markup=types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1, one_time_keyboard=True)
-    return markup.add(*[types.KeyboardButton(i) for i in buttons])
-    
-'''
-
 def keyboard_registration():
     buttons=('Реєстрація', 'Cancel')
     answers=('rg_yes', 'rg_no')
