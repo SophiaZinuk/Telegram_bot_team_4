@@ -2,7 +2,7 @@ import telebot
 from telebot import types
 import google_sheets 
 import markups
-import handlers
+#import handlers
 
 
 TOKEN_BOT='6093636754:AAEXctCKEmEVM-nhms6g7ss8t7huY4wRPq0'
@@ -14,30 +14,36 @@ HEAD_RQST_SHEET=google_sheets.get_head()
 dict_rqst=dict()
 
 
-
-
 #start
 @bot.message_handler(commands=['start','use'])
 def start(message):
-    mes=f'Привіт, {message.from_user.first_name}! Вас вітає ЖК Мрія.'
-    bot.send_message(message.chat.id, mes)
-    id_user=message.from_user.id
-    #check in db_tenants
-    if google_sheets.is_user(id_user):
-        #goto menu request
-        bot.send_message(message.chat.id, 'З поверненням!', reply_markup=markups.keyboard_request()) 
-        
+    #check id on user or security!!!!!!
+    mes=f'Привіт, {message.from_user.first_name}! '
+    if google_sheets.check_security(message.chat.id):
+        mes+='Охорона.'
+        bot.send_message(message.chat.id, mes)
+    
     else:
-        #show button 'registration', 'cancel'
-        markup=markups.keyboard_registration()
-        bot.send_message(message.chat.id, 'Бажаєте зареєструватись?', reply_markup=markup)
-        
+
+        mes+=' Вас вітає ЖК Мрія.'
+        bot.send_message(message.chat.id, mes)
+        id_user=message.from_user.id
+        #check in db_tenants
+        if google_sheets.is_user(id_user):
+            #goto menu request
+            bot.send_message(message.chat.id, 'З поверненням!', reply_markup=markups.keyboard_request()) 
+            
+        else:
+            #show button 'registration', 'cancel'
+            markup=markups.keyboard_registration()
+            bot.send_message(message.chat.id, 'Бажаєте зареєструватись?', reply_markup=markup)
+            
 
 
 @bot.callback_query_handler(func=lambda call: call.data in ('rg_yes', 'rg_no'))
 def handler_registration(call):
     if call.data=='rg_yes':
-        bot.answer_callback_query(call.id, 'Good')
+        bot.answer_callback_query(call.id, text='Good') #!!!!!!
         mes_for_tel_number='Відправте Ваш номер телефону для реєстрації у боті.'
         phone_number=bot.send_message(call.message.chat.id, text=mes_for_tel_number)
         
@@ -45,6 +51,7 @@ def handler_registration(call):
        
     else:
         bot.answer_callback_query(call.id, 'Ohhhh')
+        bot.send_message(call.message.chat.id, text='До побачення!')
         return
 
 
@@ -72,7 +79,7 @@ def phone(number):
 @bot.callback_query_handler(func=lambda call: call.data in ('rq_create','rq_state','rq_security'))
 def requests(call):
     if call.data=='rq_security':
-        bot.answer_callback_query(call.id, 'Good')
+        bot.answer_callback_query(call.id, 'Good') #!!!!!
         bot.send_message(call.message.chat.id, text=google_sheets.security_contact())
         return
     elif call.data=='rq_create':
@@ -170,7 +177,7 @@ def handler_kpp(call):
         bot.answer_callback_query(call.id, 'Good') 
         dict_rqst['kpp']='Невідомий'
     
-    mes=bot.send_message(call.message.chat.id, text='Ваша заявка напрвлена в обробку')
+    mes=bot.send_message(call.message.chat.id, text='Ваша заявка відправлена в обробку')
     create_rq(mes)
     
 

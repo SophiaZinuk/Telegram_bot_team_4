@@ -132,8 +132,18 @@ def get_head():
 
 #### /end Request
 
+#### /Security
+
+def check_security(id_user):
+    db_sheets=autorize()
+    security=db_sheets[2]
+    return True if str(id_user) in security.col_values(col=2) else False
+
+#####/end Security
+
 
 #Tests 
+#print(check_security('253556'))
 #print(get_rqst_adress(11))
 #print(get_head())
 #print(get_state_request(id_user=6259460200, id_request=1))
