@@ -12,6 +12,7 @@
   "you_have_already_logged_out": "You have been already logged out",
   "login_successful": "Login successful",
   "use_description": "start conversation with the bot",
+  "welcome_message": "ЖК МРІЯ welcomes you.",
   "about_description": "find out more about the bot",
   "use_following_commands": "Please, use following commands",
   "about_bot": "This bot will significantly simplify the application process in our Residence",
@@ -41,5 +42,9 @@
   "all_applications": "All applications",
   "approve": "Approve",
   "reject": "Reject",
-  "application_status_already_updated": "Application status already updated"
+  "application_status_already_updated": "Application status already updated",
+  "security_number_first": "+30634567890",
+  "security_number_second": "+30965432100",
+  "security_number_text": "Security contacts:",
+  "enter_taxi_number": "Enter taxi number:"
 }

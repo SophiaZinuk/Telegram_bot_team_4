@@ -33,10 +33,13 @@ class MainMenuCallbackQueryHandler(GeneralCallbackQueryHandler):
             self._handle_create_application(callback)
         if callback.data == CallbackType.APPLICATIONS_STATUS:
             self._handle_applications_status(callback)
+        if callback.data == CallbackType.SECURITY_CONTACTS:
+            self._handle_security_contacts(callback)
 
     def _handle_create_application(self, callback: CallbackQuery):
         user_id: int = callback.from_user.id
-        is_authorized: bool = self.user_state_manager.is_user_authorized(user_id)
+        is_authorized: bool = self.user_state_manager.is_user_authorized(
+            user_id)
         if is_authorized:
             self.bot.answer_callback_query(callback_query_id=callback.id)
             self.bot.edit_message_text(self.localization.lang['choose_application_type'],
@@ -54,25 +57,43 @@ class MainMenuCallbackQueryHandler(GeneralCallbackQueryHandler):
     def _handle_applications_status(self, callback: CallbackQuery):
         self.bot.answer_callback_query(callback_query_id=callback.id)
         user_id: int = callback.from_user.id
-        is_authorized: bool = self.user_state_manager.is_user_authorized(user_id)
+        is_authorized: bool = self.user_state_manager.is_user_authorized(
+            user_id)
         if is_authorized:
             self.bot.answer_callback_query(callback_query_id=callback.id)
-            markup: InlineKeyboardMarkup = self._assemble_application_statuses_markup(callback)
+            markup: InlineKeyboardMarkup = self._assemble_application_statuses_markup(
+                callback)
             msg: Message = self.bot.edit_message_text(self.localization.lang['your_applications'],
                                                       callback.message.chat.id,
                                                       callback.message.message_id,
                                                       reply_markup=markup)
             menu: MenuState = MenuState(MenuType.APPLICATIONS_PAGINATION_MENU)
-            self.user_state_manager.update_menu(callback.from_user.id, msg.id, menu)
+            self.user_state_manager.update_menu(
+                callback.from_user.id, msg.id, menu)
         else:
             self.bot.send_message(
                 callback.message.chat.id,
                 self.localization.lang['authorize_first'])
 
+    def _handle_security_contacts(self, callback: CallbackQuery):
+        text: str = self._assemble_contacts_text()
+        self.bot.send_message(callback.message.chat.id, text)
+
     def _assemble_application_statuses_markup(self, callback: CallbackQuery) -> InlineKeyboardMarkup:
-        user_state: UserState = self.user_state_manager.get_state(callback.from_user.id)
-        menu: ApplicationsPaginationMenu = self.menu_manager.get_menu(MenuType.APPLICATIONS_PAGINATION_MENU)
+        user_state: UserState = self.user_state_manager.get_state(
+            callback.from_user.id)
+        menu: ApplicationsPaginationMenu = self.menu_manager.get_menu(
+            MenuType.APPLICATIONS_PAGINATION_MENU)
         applications: List[Application] = self.application_service.find_by_user_id_with_pagination(
             user_state.db_id, 4, 0)
         markup: InlineKeyboardMarkup = menu.create(applications, 0)
         return markup
+
+    def _assemble_contacts_text(self) -> str:
+        result = ''
+        result += self.localization.lang['security_number_text']
+        result += '\n\n'
+        result += self.localization.lang['security_number_first']
+        result += '\n'
+        result += self.localization.lang['security_number_second']
+        return result

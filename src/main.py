@@ -55,7 +55,8 @@ localization: Localization = Localization(Language.UA)
 dynamic_localization: DynamicLocalization = DynamicLocalization(localization)
 
 # util
-application_util: ApplicationUtil = ApplicationUtil(localization, dynamic_localization)
+application_util: ApplicationUtil = ApplicationUtil(
+    localization, dynamic_localization)
 
 # menu
 commands_menu: CommandsMenu = CommandsMenu(localization)
@@ -73,7 +74,8 @@ taxi_conversation: TaxiConversation = TaxiConversation(bot, localization, menu_m
                                                        application_service, user_service)
 
 # handlers
-command_handler: CommandHandler = CommandHandler(bot, auth_conversation, localization)
+command_handler: CommandHandler = CommandHandler(
+    bot, auth_conversation, localization)
 single_application_callback_query_handler: GeneralCallbackQueryHandler = SingleApplicationCallbackQueryHandler(
     bot,
     localization,

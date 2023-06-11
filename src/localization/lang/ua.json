@@ -14,6 +14,7 @@
   "use_description": "почати спілкування з ботом",
   "about_description": "дізнатися більше про бота",
   "use_following_commands": "Будь ласка, використовуйте наступні команди",
+  "welcome_message": "Вас вітає ЖК МРІЯ.",
   "about_bot": "Цей чудовий бот значно спростить процес подання заявок у нашому ЖК.",
   "taxi": "Таксі",
   "carrier": "Кур'єр",
@@ -41,5 +42,9 @@
   "all_applications": "Всі заявки",
   "approve": "Підтвердити",
   "reject": "Відхилити",
-  "application_status_already_updated": "Заявка вже була оброблена"
+  "application_status_already_updated": "Заявка вже була оброблена",
+  "security_number_first": "+30634567890",
+  "security_number_second": "+30965432100",
+  "security_number_text": "Контактні номери охорони:", 
+  "enter_taxi_number": "Введіть номер таксі:"
 }

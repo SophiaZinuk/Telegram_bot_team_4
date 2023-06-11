@@ -33,7 +33,8 @@ class TaxiConversation:
 
     def start_conversation(self, callback: types.CallbackQuery):
         try:
-            msg = self.bot.send_message(callback.message.chat.id, 'Введіть номер таксі:')
+            msg = self.bot.send_message(
+                callback.message.chat.id, self.localization.lang['enter_taxi_number'])
             self.bot.register_next_step_handler(msg, self._process_taxi_number)
         except Exception as e:
             self.bot.send_message(
@@ -45,15 +46,17 @@ class TaxiConversation:
         try:
             taxi_number: str = self._get_taxi_number(message)
             self._update_state_with_taxi_application(message, taxi_number)
-            user: User = self._save_taxi_application_to_db(message, taxi_number)
-            reply_text: str = self.localization.lang['your_application_accepted_by_address'] + ' ' + user.address
+            user: User = self._save_taxi_application_to_db(
+                message, taxi_number)
+            reply_text: str = self.localization.lang['your_application_accepted_by_address'] + \
+                ' ' + user.address
             self.bot.send_message(message.chat.id, reply_text)
             self.bot.clear_step_handler_by_chat_id(message.chat.id)
         except Exception as e:
             print(e)
             self.bot.send_message(
-                    message.chat.id,
-                    self.localization.lang['something_went_wrong'])
+                message.chat.id,
+                self.localization.lang['something_went_wrong'])
             self.bot.clear_step_handler_by_chat_id(message.chat.id)
 
     def _get_taxi_number(self, msg: types.Message) -> str:
@@ -62,10 +65,12 @@ class TaxiConversation:
     def _update_state_with_taxi_application(self, msg: types.Message, taxi_number: str):
         taxi_application: TaxiApplicationState = TaxiApplicationState()
         taxi_application.car_number = taxi_number
-        self.user_state_manager.update_taxi_application(msg.from_user.id, taxi_application)
+        self.user_state_manager.update_taxi_application(
+            msg.from_user.id, taxi_application)
 
     def _save_taxi_application_to_db(self, msg: types.Message, taxi_number: str) -> User:
-        user_state: UserState = self.user_state_manager.get_state(msg.from_user.id)
+        user_state: UserState = self.user_state_manager.get_state(
+            msg.from_user.id)
         user: User = self.user_service.find_user_by_id(user_state.db_id)
 
         application: Application = Application()
@@ -79,4 +84,3 @@ class TaxiConversation:
         application.application_data = application_data
         self.application_service.create_application(application)
         return user
-
