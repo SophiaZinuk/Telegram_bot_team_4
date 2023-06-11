@@ -116,7 +116,7 @@ class AuthConversation:
         if phone_number is None:
             return None
         result: str = phone_number
-        firts_symbol: str = phone_number.split()[0]
-        if firts_symbol != '+':
+        firt_symbol: str = phone_number[0]
+        if firt_symbol != '+':
             result = '+' + result
         return result
