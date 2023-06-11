@@ -44,11 +44,16 @@ def is_in_db_tenants( tel_number:str )->bool:
     return False
 
 # is tel in db_tenants to add id_user_telegram and tel
-def is_user_telegram(user_id)->bool:
+def is_number_in_user_telegram(num_tel)->bool:
     db_sheets=autorize()
     users_telegram=db_sheets[1]
-    return True if str(user_id) not in users_telegram.col_values(col=1) else False
+    return True if str(num_tel) in users_telegram.col_values(col=2) else False
+        
 
+def is_user(user_id)->bool:
+    db_sheets=autorize()
+    users_telegram=db_sheets[1]
+    return True if str(user_id) in users_telegram.col_values(col=1) else False
 
 # add user_telegram_id and telephone into table
 def add_user_id(user_id, telephone)->bool:

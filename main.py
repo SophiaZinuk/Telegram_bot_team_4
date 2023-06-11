@@ -23,7 +23,7 @@ def start(message):
     bot.send_message(message.chat.id, mes)
     id_user=message.from_user.id
     #check in db_tenants
-    if google_sheets.is_user_telegram(id_user)==False:
+    if google_sheets.is_user(id_user):
         #goto menu request
         bot.send_message(message.chat.id, 'З поверненням!', reply_markup=markups.keyboard_request()) 
         
@@ -53,12 +53,14 @@ def phone(number):
     correct_number=google_sheets.is_correct_number(number.text)
     #check is correct number
     if correct_number:
-        if google_sheets.is_in_db_tenants(correct_number):
-            
-            google_sheets.add_user_id(number.chat.id, correct_number)
-            bot.send_message(number.chat.id, text='Ви успішно зареєстровані')
-            bot.send_message(number.chat.id, 'Оберіть дію: ', reply_markup=markups.keyboard_request()) 
-
+        if google_sheets.is_in_db_tenants(correct_number) :
+            #check in db_users_telegram
+            if google_sheets.is_number_in_user_telegram(correct_number)==False:
+                google_sheets.add_user_id(number.chat.id, correct_number)
+                bot.send_message(number.chat.id, text='Ви успішно зареєстровані')
+                bot.send_message(number.chat.id, 'Оберіть дію: ', reply_markup=markups.keyboard_request()) 
+            else:
+                bot.send_message(number.chat.id, text='За таким номером зареєстрований інший користувач. Зверніться до адміністрації')
         else:
             bot.send_message(number.chat.id, text='Ваш номер телефону не знайдено! Зверніться до адміністрації')
     
