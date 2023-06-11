@@ -9,7 +9,7 @@ def keyboard_registration():
     return markup
 
 def keyboard_request():
-    buttons=('Створити заявку','Стан заявки','Контакти охорони')
+    buttons=('Нова заявка','Стан заявки','Контакти охорони')
     answers=('rq_create','rq_state','rq_security')
     markup=types.InlineKeyboardMarkup()    
     markup.add(*[types.InlineKeyboardButton(text=buttons[i], callback_data=answers[i]) for i in range(len(buttons))])

@@ -91,7 +91,9 @@ def requests(call):
 def get_status_request(number):
     if number.text.strip().isdigit():
         text=google_sheets.get_state_request(id_user=number.from_user.id, id_request=int(number.text))
-        adress=google_sheets.get_rqst_adress(id_request=int(number.text))
+        adress=google_sheets.get_rqst_adress(id_request=int(number.text)) \
+            if google_sheets.is_rqst_of_user(number.from_user.id, int(number.text)) \
+                else ''
     else:
         text='Введено некорректні дані!'
     bot.send_message(number.from_user.id, text=f'Статус заявки № {number.text} за адресою {adress}: "{text}"')

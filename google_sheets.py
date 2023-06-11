@@ -96,14 +96,25 @@ def add_request(request: tuple):
     rqst=db_sheets[4]
     rqst.append_row(values=request)
 
-def get_state_request(id_user, id_request):
-    states=('В обробці', 'Оброблено', 'Відхилено')
+def is_rqst_of_user(id_user, id_request):
     db_sheets=autorize()
     rqst=db_sheets[4]
     for row in rqst.get_all_records():
         if row['id_user']==id_user and row['id_request']==id_request :
-            return states[row['status']]    
-    return 'Заявку не знайдено!'
+            return True
+    return False
+    
+
+def get_state_request(id_user, id_request): ###!!!redone
+    states=('В обробці', 'Оброблено', 'Відхилено')
+    db_sheets=autorize()
+    rqst=db_sheets[4]
+    if is_rqst_of_user(id_user, id_request):
+        for row in rqst.get_all_records():
+            if row['id_user']==id_user and row['id_request']==id_request :
+                return states[row['status']]
+    else:      
+        return 'Заявку не знайдено!'
 
 def get_rqst_adress(id_request):
     db_sheets=autorize()
