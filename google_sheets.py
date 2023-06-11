@@ -139,10 +139,23 @@ def check_security(id_user):
     security=db_sheets[2]
     return True if str(id_user) in security.col_values(col=2) else False
 
+def sec_get_list_requests():
+    db_sheets=autorize()
+    sec_rqsts=db_sheets[4]
+    list_rqsts=['№'+str(row['id_request'])+' '+row['adress']+' '+row['target'] \
+                for row in sec_rqsts.get_all_records() if row['status']==0 ]
+    return list_rqsts
+
+def sec_get_list_id_requests():
+    db_sheets=autorize()
+    sec_rqsts=db_sheets[4]
+    list_id_rqsts=[row['id_request'] for row in sec_rqsts.get_all_records() if row['status']==0 ]
+    return list_id_rqsts
 #####/end Security
 
 
 #Tests 
+print(type(sec_get_list_id_requests()[0]))
 #print(check_security('253556'))
 #print(get_rqst_adress(11))
 #print(get_head())

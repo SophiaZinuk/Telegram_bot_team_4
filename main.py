@@ -17,11 +17,12 @@ dict_rqst=dict()
 #start
 @bot.message_handler(commands=['start','use'])
 def start(message):
-    #check id on user or security!!!!!!
     mes=f'Привіт, {message.from_user.first_name}! '
+
+    #check id on user or security
     if google_sheets.check_security(message.chat.id):
         mes+='Охорона.'
-        bot.send_message(message.chat.id, mes)
+        bot.send_message(message.chat.id, mes, reply_markup=markups.sec_keyboard_get_requests())
     
     else:
 
@@ -37,13 +38,53 @@ def start(message):
             #show button 'registration', 'cancel'
             markup=markups.keyboard_registration()
             bot.send_message(message.chat.id, 'Бажаєте зареєструватись?', reply_markup=markup)
+
             
+### Security handlers
+@bot.callback_query_handler(func=lambda call: call.data in ('sec_start_rqsts','sec_start_exec'))
+def sec_main_menu_handler(call):
+    if call.data=='sec_start_rqsts':
+        bot.answer_callback_query(call.id, text='Good') 
+        list_requests=google_sheets.sec_get_list_requests()
+        for rqst in list_requests:
+            bot.send_message(call.message.chat.id, text=rqst)
+        bot.send_message(call.message.chat.id, text='Оберіть дію', reply_markup=markups.sec_keyboard_get_requests())
+        
+    elif call.data=='sec_start_exec':
+        
+        number_rqst=bot.send_message(call.message.chat.id, text='Введіть номер заявки:')
+        bot.register_next_step_handler(number_rqst, sec_exec)
+        
+
+def sec_exec(message):
+    id_rqst=message.text
+    if id_rqst.strip().isdigit():
+        
+        if int(id_rqst) in google_sheets.sec_get_list_id_requests():
+            bot.send_message(message.chat.id, text=f'Оберіть дію для заявки № {id_rqst}', reply_markup=markups.sec_keyboard_exec_rqst())
+        else:
+            bot.send_message(message.chat.id, text='Заявка виконана або не існує')
+            bot.send_message(message.chat.id, text='Оберіть дію', reply_markup=markups.sec_keyboard_get_requests())
+
+    else:
+        bot.send_message(message.chat.id, text='Введено некоректні дані')
+        bot.send_message(message.chat.id, text='Оберіть дію', reply_markup=markups.sec_keyboard_get_requests())
 
 
+@bot.callback_query_handler(func=lambda call: call.data in ('sec_exec','sec_cancel'))
+def sec_main_menu_handler(call):
+    if call.data=='sec_exec':
+        pass
+    elif call.data=='sec_cancel':
+        pass
+
+##### /end security handlers
+
+#### Users handlers
 @bot.callback_query_handler(func=lambda call: call.data in ('rg_yes', 'rg_no'))
 def handler_registration(call):
     if call.data=='rg_yes':
-        bot.answer_callback_query(call.id, text='Good') #!!!!!!
+        bot.answer_callback_query(call.id, text='Good') 
         mes_for_tel_number='Відправте Ваш номер телефону для реєстрації у боті.'
         phone_number=bot.send_message(call.message.chat.id, text=mes_for_tel_number)
         
@@ -229,14 +270,15 @@ def handler_parking(call):
 
 
 
-
-def create_rq(message): #  !!!! redo add KPP
+# add request to table and send message to user
+def create_rq(message): 
     request=[]
     for i in HEAD_RQST_SHEET:
         request.append(dict_rqst[i]) if i in dict_rqst.keys() else request.append(None)    
     google_sheets.add_request(request)    
     bot.send_message(message.chat.id, text=f'Ваша заявка № {request[0]} прийнята!')
 
+##### end Users handlers/
 
 bot.polling(non_stop=True)
 
