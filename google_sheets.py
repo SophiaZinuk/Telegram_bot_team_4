@@ -172,10 +172,21 @@ def sec_get_id_user(id_rqst:int):
             return row['id_user']
     return None
 
+# add security comment to request
+def sec_add_comment(id_rqst:int, message:str):
+    db_sheets=autorize()
+    sec_rqsts=db_sheets[4]
+    for i in range(len(sec_rqsts.col_values(1))):
+        if str(id_rqst)==sec_rqsts.col_values(col=1)[i]:
+            sec_rqsts.update_cell(i+1, 11, message)
+            return True
+    return False
+
 #####/end Security
 
 
 #Tests 
+#print(sec_add_comment(22, 'khjghfhg'))
 #print(sec_get_id_user(25))
 #sec_update_rqst(16, 1)
 #print(type(sec_get_list_id_requests()[0]))

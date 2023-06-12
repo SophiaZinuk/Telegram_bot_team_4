@@ -77,16 +77,39 @@ def sec_exec(message):
 def sec_main_menu_handler(call):
     id_rqst=call.message.text
     if call.data=='sec_exec':
+        bot.answer_callback_query(call.id, text='Good') 
         if google_sheets.sec_update_rqst(id_rqst=int(id_rqst), state=1):
-            bot.send_message(call.message.chat.id, text='Updated')
+            bot.send_message(call.message.chat.id, text=f'Updated {id_rqst}')
             id_user=google_sheets.sec_get_id_user(int(id_rqst))
-            bot.send_message(chat_id=id_user, text='Your request is executed')
+            
+            #add comment
+            comment=bot.send_message(call.message.chat.id, text='Введіть свій коментар')
+            bot.register_next_step_handler(comment, sec_add_comment, int(id_rqst))
+
     elif call.data=='sec_cancel':
+        bot.answer_callback_query(call.id, text='Ohhh') 
         if google_sheets.sec_update_rqst(id_rqst=int(id_rqst), state=2):            
-            bot.send_message(call.message.chat.id, text='Canceled')
-            id_user=google_sheets.sec_get_id_user(int(id_rqst))
-            bot.send_message(chat_id=id_user, text='Your request is cancelled')
+            bot.send_message(call.message.chat.id, text=f'{id_rqst} Canceled')
+           
+            # add comment of reason to cancel
+            comment=bot.send_message(call.message.chat.id, text='Введіть свій коментар, причину відхилення')
+            bot.register_next_step_handler(comment, sec_add_comment_cancel, int(id_rqst))
     #send result to id_user.chat from requests.sheet
+
+def sec_add_comment(message, id_rqst):
+    if google_sheets.sec_add_comment(id_rqst, message.text):
+        bot.send_message(message.chat.id, text='comment added')
+        id_user=google_sheets.sec_get_id_user(int(id_rqst))
+        bot.send_message(chat_id=id_user, text=f'Your request {id_rqst} is executed. Коментар: {message.text}')
+    bot.send_message(message.chat.id, text='Оберіть дію', reply_markup=markups.sec_keyboard_get_requests())
+
+def sec_add_comment_cancel(message, id_rqst):
+    if google_sheets.sec_add_comment(id_rqst, message.text):
+        bot.send_message(message.chat.id, text='comment added')
+        id_user=google_sheets.sec_get_id_user(int(id_rqst))
+        bot.send_message(chat_id=id_user, text=f'Your request {id_rqst} is cancelled. Коментар: {message.text}')
+    bot.send_message(message.chat.id, text='Оберіть дію', reply_markup=markups.sec_keyboard_get_requests())
+
 
 ##### /end security handlers
 

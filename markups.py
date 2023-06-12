@@ -71,3 +71,10 @@ def sec_keyboard_exec_rqst():
     markup=types.InlineKeyboardMarkup()    
     markup.add(*[types.InlineKeyboardButton(text=buttons[i], callback_data=answers[i]) for i in range(len(buttons))])
     return markup
+
+def sec_keyboard_comment_answer():
+    buttons=('Так',' Ні')
+    answers=('sec_yes','sec_no')
+    markup=types.InlineKeyboardMarkup()    
+    markup.add(*[types.InlineKeyboardButton(text=buttons[i], callback_data=answers[i]) for i in range(len(buttons))])
+    return markup
