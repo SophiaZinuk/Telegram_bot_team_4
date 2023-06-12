@@ -1,38 +1,74 @@
 import telebot
-SUB_HOME='Home'
+from telebot import types
 
-keyboads_menu=['', SUB_HOME]
+def keyboard_registration():
+    buttons=('Реєстрація', 'Cancel')
+    answers=('rg_yes', 'rg_no')
+    markup=types.InlineKeyboardMarkup()    
+    markup.add(*[types.InlineKeyboardButton(text=buttons[i], callback_data=answers[i]) for i in range(len(buttons))])
+    return markup
 
-def send_target():
-    pass
+def keyboard_request():
+    buttons=('Нова заявка','Стан заявки','Контакти охорони', 'Мої заявки')
+    answers=('rq_create','rq_state','rq_security', 'rq_all_requests')
+    markup=types.InlineKeyboardMarkup()    
+    markup.add(*[types.InlineKeyboardButton(text=buttons[i], callback_data=answers[i]) for i in range(len(buttons))])
+    return markup
 
-def status_request():
-    pass
 
-def contact_security():
-    pass
+def keyboard_target():
+    buttons=('Таксі','Кур’єр','Гості', 'Проблеми з парковкою','Інше')
+    answers=('trg_taxi','trg_curier','trg_guests', 'trg_parking_problem','trg_other')
+    markup=types.InlineKeyboardMarkup()    
+    markup.add(*[types.InlineKeyboardButton(text=buttons[i], callback_data=answers[i]) for i in range(len(buttons))])
+    return markup
 
-def add_new_admin():
-    pass
+def keyboard_curier():
+    buttons=('Кур’єр без авто','Кур’єр з авто')
+    answers=('curier_no','curier_yes')
+    markup=types.InlineKeyboardMarkup()    
+    markup.add(*[types.InlineKeyboardButton(text=buttons[i], callback_data=answers[i]) for i in range(len(buttons))])
+    return markup
 
-def add_black_list():
-    pass
+def keyboard_guests():
+    buttons=('Гості без авто','Гості з авто')
+    answers=('guests_no','guests_yes')
+    markup=types.InlineKeyboardMarkup()    
+    markup.add(*[types.InlineKeyboardButton(text=buttons[i], callback_data=answers[i]) for i in range(len(buttons))])
+    return markup
 
-def taxi():
-    pass
+def keyboard_problem_parking():
+    buttons=('Ваш авто заблокований','Авто в недозволеному місці')
+    answers=('auto_blocked','auto_incorrect_place')
+    markup=types.InlineKeyboardMarkup()    
+    markup.add(*[types.InlineKeyboardButton(text=buttons[i], callback_data=answers[i]) for i in range(len(buttons))])
+    return markup
 
-def curier():
-    pass
+def keyboard_select_kpp():
+    buttons=('Перший КПП','Другий КПП','Невідомий')
+    answers=('kpp_first','kpp_second', 'kpp_undef')
+    markup=types.InlineKeyboardMarkup()    
+    markup.add(*[types.InlineKeyboardButton(text=buttons[i], callback_data=answers[i]) for i in range(len(buttons))])
+    return markup
 
-def guests(id_user:int, avto:bool):
-    pass
+def keyboard_additional_info():
+    buttons=('Так',' Ні')
+    answers=('info_yes','info_no')
+    markup=types.InlineKeyboardMarkup()    
+    markup.add(*[types.InlineKeyboardButton(text=buttons[i], callback_data=answers[i]) for i in range(len(buttons))])
+    return markup
 
-def is_avto()->bool:
-    pass
+def sec_keyboard_get_requests():
+    buttons=('Заявки','Виконати заявку')
+    answers=('sec_start_rqsts','sec_start_exec')
+    markup=types.InlineKeyboardMarkup()    
+    markup.add(*[types.InlineKeyboardButton(text=buttons[i], callback_data=answers[i]) for i in range(len(buttons))])
+    return markup
 
-def parking():
-    pass
-
-def other():
-    pass
+def sec_keyboard_exec_rqst():
+    buttons=('Виконано','Відхилено')
+    answers=('sec_exec','sec_cancel')
+    markup=types.InlineKeyboardMarkup()    
+    markup.add(*[types.InlineKeyboardButton(text=buttons[i], callback_data=answers[i]) for i in range(len(buttons))])
+    return markup
 
