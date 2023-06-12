@@ -75,7 +75,7 @@ def sec_exec(message):
         bot.send_message(message.chat.id, text='Оберіть дію', reply_markup=markups.sec_keyboard_get_requests())
 
 
-##!!REDO
+
 @bot.callback_query_handler(func=lambda call: call.data in ('sec_exec','sec_cancel'))
 def sec_main_menu_handler(call):
     id_rqst=call.message.text
@@ -263,6 +263,10 @@ def handler_kpp(call):
     
     mes=bot.send_message(call.message.chat.id, text='Ваша заявка відправлена в обробку')
     create_rq(mes)
+    list_surity=google_sheets.sec_get_list_id()
+    if list_surity:
+        for id_sec in list_surity:
+            bot.send_message(id_sec, text='Отримано нову заявку')
     
 
 @bot.callback_query_handler(func=lambda call: call.data in ('curier_no','curier_yes'))

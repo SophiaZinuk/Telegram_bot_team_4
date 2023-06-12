@@ -190,10 +190,18 @@ def sec_add_comment(id_rqst:int, message:str):
             return True
     return False
 
+def sec_get_list_id():
+    db_sheets=autorize()
+    sec_rqsts=db_sheets[2]
+    lst_id=[int(i) for i in sec_rqsts.col_values(col=2) if i.isdigit()]
+    return lst_id
+
+
 #####/end Security
 
 
 #Tests 
+#print(sec_get_list_id())
 #print(sec_add_comment(22, 'khjghfhg'))
 #print(sec_get_id_user(25))
 #sec_update_rqst(16, 1)
