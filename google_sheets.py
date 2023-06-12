@@ -131,6 +131,14 @@ def get_head():
     return rqst.row_values(1)
 
 #ADD history of requests for user
+def get_list_rqsts_user(id_user: int):
+    states=('В обробці', 'Оброблено', 'Відхилено')
+    db_sheets=autorize()
+    sec_rqsts=db_sheets[4]
+    list_rqsts=['№'+str(row['id_request'])+' '+row['adress']+' '+row['target']+' '+states[row['status']]+' '+row['comments']\
+                for row in sec_rqsts.get_all_records() if row['id_user']==id_user ]
+    return list_rqsts
+    
 
 #### /end Request
 
@@ -144,7 +152,7 @@ def check_security(id_user):
 def sec_get_list_requests():
     db_sheets=autorize()
     sec_rqsts=db_sheets[4]
-    list_rqsts=['№'+str(row['id_request'])+' '+row['adress']+' '+row['target'] \
+    list_rqsts=['№'+str(row['id_request'])+' '+row['adress']+' '+row['target']+' '+str(row['number of avto'])\
                 for row in sec_rqsts.get_all_records() if row['status']==0 ]
     return list_rqsts
 

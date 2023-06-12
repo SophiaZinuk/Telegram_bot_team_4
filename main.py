@@ -46,8 +46,11 @@ def sec_main_menu_handler(call):
     if call.data=='sec_start_rqsts':
         bot.answer_callback_query(call.id, text='Good') 
         list_requests=google_sheets.sec_get_list_requests()
-        for rqst in list_requests:
-            bot.send_message(call.message.chat.id, text=rqst)
+        if list_requests:
+            for rqst in list_requests:
+                bot.send_message(call.message.chat.id, text=rqst)
+        else:
+            bot.send_message(call.message.chat.id, text='Ваш список пустий')
         bot.send_message(call.message.chat.id, text='Оберіть дію', reply_markup=markups.sec_keyboard_get_requests())
         
     elif call.data=='sec_start_exec':
@@ -150,7 +153,7 @@ def phone(number):
         bot.register_next_step_handler(repeat_number, phone) 
 
 
-@bot.callback_query_handler(func=lambda call: call.data in ('rq_create','rq_state','rq_security'))
+@bot.callback_query_handler(func=lambda call: call.data in ('rq_create','rq_state','rq_security', 'rq_all_requests'))
 def requests(call):
     if call.data=='rq_security':
         bot.answer_callback_query(call.id, 'Good') #!!!!!
@@ -166,6 +169,13 @@ def requests(call):
         number=bot.send_message(call.message.chat.id, text='Введіть номер заявки')
         bot.register_next_step_handler(number, get_status_request)
         return
+    elif call.data=='rq_all_requests':
+        list_requests=google_sheets.get_list_rqsts_user(call.message.chat.id)
+        if list_requests:
+            for rqst in list_requests:
+                bot.send_message(call.message.chat.id, text=rqst)
+        else:
+            bot.send_message(call.message.chat.id, text='Ваш список пустий')
 
      
 
