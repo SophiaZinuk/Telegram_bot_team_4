@@ -9,6 +9,7 @@ TOKEN_BOT='6093636754:AAEXctCKEmEVM-nhms6g7ss8t7huY4wRPq0'
 
 bot=telebot.TeleBot(TOKEN_BOT)
 
+## columns of request.sheet:
 ## ['id_request', 'id_user', 'adress', 'telephone', 'target', 'number of avto', 'additional info', 'kpp', 'date', 'status']
 HEAD_RQST_SHEET=google_sheets.get_head()
 dict_rqst=dict()
@@ -328,44 +329,5 @@ def create_rq(message):
 ##### end Users handlers/
 
 bot.polling(non_stop=True)
-
-'''   
-
-@bot.callback_query_handler(func=lambda callback: callback=callback.data)
-def registration(callback):
-    bot.send_message(callback.chat.id, 'URAAAAAA')
-
-    
-#get text
-@bot.message_handler(content_types=['text'])
-def get_user_text(message):
-    if message.text.lower()=='hello':
-        bot.send_message(message.chat.id, message.from_user.id)
-    else:
-        bot.send_message(message.chat.id, "I don't understand you")
-
-
-#get photo
-@bot.message_handler(content_types='photo')
-def get_user_photo(message):
-    bot.send_message(message.chat.id, 'Photo')
-
-#display submits
-@bot.message_handler(commands=['submit'])
-def submit(message):
-    markup=types.InlineKeyboardMarkup()
-    markup.add(types.InlineKeyboardButton('Open site', url='https://pypi.org/project/pyTelegramBotAPI/'))
-    bot.send_message(message.chat.id, 'Open!', reply_markup=markup)
-
-#help /show submits
-@bot.message_handler(commands=['help'])
-def submit(message):
-    markup=types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
-    call=types.KeyboardButton('Zayavka' )
-    taxi=types.KeyboardButton('Taxi')
-    markup.add(call, taxi)
-    bot.send_message(message.chat.id, 'Go!', reply_markup=markup)
-
-'''
 
 

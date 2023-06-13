@@ -1,4 +1,3 @@
-#import telebot
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
@@ -105,7 +104,7 @@ def is_rqst_of_user(id_user, id_request):
     return False
     
 
-def get_state_request(id_user, id_request): ###!!!redone
+def get_state_request(id_user, id_request): 
     states=('В обробці', 'Оброблено', 'Відхилено')
     db_sheets=autorize()
     rqst=db_sheets[4]
@@ -135,7 +134,7 @@ def get_list_rqsts_user(id_user: int):
     states=('В обробці', 'Оброблено', 'Відхилено')
     db_sheets=autorize()
     sec_rqsts=db_sheets[4]
-    list_rqsts=['№'+str(row['id_request'])+' '+row['adress']+' '+row['target']+' '+states[row['status']]+' '+row['comments']\
+    list_rqsts=['№'+str(row['id_request'])+', '+row['adress']+', '+row['target']+', "'+states[row['status']]+'" '+row['comments']\
                 for row in sec_rqsts.get_all_records() if row['id_user']==id_user ]
     return list_rqsts
     
@@ -152,7 +151,7 @@ def check_security(id_user):
 def sec_get_list_requests():
     db_sheets=autorize()
     sec_rqsts=db_sheets[4]
-    list_rqsts=['№'+str(row['id_request'])+' '+row['adress']+' '+row['target']+' '+str(row['number of avto'])\
+    list_rqsts=['№'+str(row['id_request'])+', '+row['adress']+', '+row['target']+' '+str(row['number of avto'])\
                 for row in sec_rqsts.get_all_records() if row['status']==0 ]
     return list_rqsts
 
@@ -200,29 +199,6 @@ def sec_get_list_id():
 #####/end Security
 
 
-#Tests 
-#print(sec_get_list_id())
-#print(sec_add_comment(22, 'khjghfhg'))
-#print(sec_get_id_user(25))
-#sec_update_rqst(16, 1)
-#print(type(sec_get_list_id_requests()[0]))
-#print(check_security('253556'))
-#print(get_rqst_adress(11))
-#print(get_head())
-#print(get_state_request(id_user=6259460200, id_request=1))
-#print(get_id_rqst())
-#get_adress('6259460200')
-#print(security_contact())
-#values=('236248', '56253525524458')
-#print(add_user_id(*values))
-
-
-
-#tel='380664442243'
-#t=is_correct_number(tel)
-#print(t)
-#if t!=-1:
-  #  print(is_in_db_tenants(t))
 
 
 
