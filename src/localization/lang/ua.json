@@ -17,8 +17,10 @@
   "welcome_message": "Вас вітає ЖК МРІЯ.",
   "about_bot": "Цей чудовий бот значно спростить процес подання заявок у нашому ЖК.",
   "taxi": "Таксі",
+  "car": "Автомобіль",
   "carrier": "Кур'єр",
-  "guests": "Гості",
+  "guests": "Гість/Кур'єр",
+  "person": "Людина",
   "parking_problems": "Проблеми з парковкою",
   "other": "Інше",
   "back": "Назад",
@@ -46,5 +48,7 @@
   "security_number_first": "+30634567890",
   "security_number_second": "+30965432100",
   "security_number_text": "Контактні номери охорони:", 
-  "enter_taxi_number": "Введіть номер таксі:"
+  "enter_taxi_number": "Введіть номер автомобіля:",
+  "parking_problems_text": "Функціонал в розробці",
+  "guest_carrier_text": "Функціонал в розробці"
 }

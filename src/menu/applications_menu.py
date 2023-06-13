@@ -12,20 +12,20 @@ class ApplicationsMenu:
     def create(self):
         markup = types.InlineKeyboardMarkup([
             [
-                types.InlineKeyboardButton(text=self.localization.lang['taxi'],
+                types.InlineKeyboardButton(text=self.localization.lang['car'],
                                            callback_data=CallbackType.TAXI),
-                types.InlineKeyboardButton(text=self.localization.lang['carrier'],
-                                           callback_data=CallbackType.CARRIER)
-            ],
-            [
                 types.InlineKeyboardButton(text=self.localization.lang['guests'],
-                                           callback_data=CallbackType.GUESTS),
+                                           callback_data=CallbackType.GUESTS)
+            ],
+            # [
+            #     types.InlineKeyboardButton(text=self.localization.lang['guests'],
+            #                                callback_data=CallbackType.GUESTS),
+            #     types.InlineKeyboardButton(text=self.localization.lang['parking_problems'],
+            #                                callback_data=CallbackType.PARKING_PROBLEMS),
+            # ],
+            [
                 types.InlineKeyboardButton(text=self.localization.lang['parking_problems'],
                                            callback_data=CallbackType.PARKING_PROBLEMS),
-            ],
-            [
-                types.InlineKeyboardButton(text=self.localization.lang['other'],
-                                           callback_data=CallbackType.OTHER),
                 types.InlineKeyboardButton(text=self.localization.lang['back'],
                                            callback_data=CallbackType.APPLICATIONS_BACK),
             ]

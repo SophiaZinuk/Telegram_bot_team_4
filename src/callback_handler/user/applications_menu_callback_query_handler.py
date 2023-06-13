@@ -28,12 +28,17 @@ class ApplicationsMenuCallbackQueryHandler(GeneralCallbackQueryHandler):
         self.taxi_conversation = taxi_conversation
 
     def handle(self, callback: types.CallbackQuery):
-        is_authorized: bool = self.user_state_manager.is_user_authorized(callback.from_user.id)
+        is_authorized: bool = self.user_state_manager.is_user_authorized(
+            callback.from_user.id)
         if is_authorized:
             if callback.data == CallbackType.APPLICATIONS_BACK:
                 self._handle_applications_back(callback)
             if callback.data == CallbackType.TAXI:
                 self._handle_taxi_application(callback)
+            if callback.data == CallbackType.PARKING_PROBLEMS:
+                self._handle_parking_problems_application(callback)
+            if callback.data == CallbackType.GUESTS:
+                self._handle_guest_carrier_application(callback)
         else:
             self.bot.answer_callback_query(callback_query_id=callback.id)
             self.bot.send_message(
@@ -49,14 +54,34 @@ class ApplicationsMenuCallbackQueryHandler(GeneralCallbackQueryHandler):
                                    callback.message.chat.id,
                                    callback.message.message_id,
                                    reply_markup=self.menu_manager.get_menu_markup(previous_menu_type))
-        self.user_state_manager.update_menu(callback.from_user.id, callback.message.message_id, previous_menu)
+        self.user_state_manager.update_menu(
+            callback.from_user.id, callback.message.message_id, previous_menu)
 
     def _handle_taxi_application(self, callback: types.CallbackQuery):
         self.bot.answer_callback_query(callback_query_id=callback.id)
         self.taxi_conversation.start_conversation(callback)
 
     def _get_previous_menu(self, callback: types.CallbackQuery) -> MenuType:
-        user_state: UserState = self.user_state_manager.get_state(callback.from_user.id)
+        user_state: UserState = self.user_state_manager.get_state(
+            callback.from_user.id)
         if user_state.is_admin:
             return MenuType.MAIN_ADMIN
         return MenuType.MAIN
+
+    def _handle_parking_problems_application(self, callback: types.CallbackQuery):
+        text: str = self._assemble_parking_problems_text()
+        self.bot.send_message(callback.message.chat.id, text)
+
+    def _assemble_parking_problems_text(self) -> str:
+        result = ''
+        result += self.localization.lang['parking_problems_text']
+        return result
+
+    def _handle_guest_carrier_application(self, callback: types.CallbackQuery):
+        text: str = self._assemble_guest_carrier_text()
+        self.bot.send_message(callback.message.chat.id, text)
+
+    def _assemble_guest_carrier_text(self) -> str:
+        result = ''
+        result += self.localization.lang['guest_carrier_text']
+        return result

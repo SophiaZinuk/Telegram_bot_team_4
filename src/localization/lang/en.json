@@ -18,7 +18,9 @@
   "about_bot": "This bot will significantly simplify the application process in our Residence",
   "taxi": "Taxi",
   "carrier": "Carrier",
-  "guests": "Guests",
+  "guests": "Guest/Carrier",
+  "car": "Car",
+  "person": "Person",
   "parking_problems": "Parking problems",
   "other": "Other",
   "back": "Back",
@@ -46,5 +48,7 @@
   "security_number_first": "+30634567890",
   "security_number_second": "+30965432100",
   "security_number_text": "Security contacts:",
-  "enter_taxi_number": "Enter taxi number:"
+  "enter_taxi_number": "Enter car number:",
+  "parking_problems_text": "Feature in development",
+  "guest_carrier_text": "Feature in development"
 }
